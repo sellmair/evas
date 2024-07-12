@@ -1,0 +1,19 @@
+public final class io/sellmair/evas/compose/ComposeExtensionsKt {
+	public static final fun collectAsState (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Landroidx/compose/runtime/State;
+	public static final fun get (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Lkotlinx/coroutines/flow/StateFlow;
+	public static final fun set (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Landroidx/compose/runtime/Composer;I)V
+}
+
+public final class io/sellmair/evas/compose/CompositionLocalsKt {
+	public static final fun events (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/Events;
+	public static final fun getLocalEvents ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun getLocalStates ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun installEvents (Lio/sellmair/evas/Events;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+	public static final fun installStates (Lio/sellmair/evas/States;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+	public static final fun states (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/States;
+}
+
+public final class io/sellmair/evas/compose/RememberEvasCoroutineScopeKt {
+	public static final fun rememberEvasCoroutineScope (Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;II)Lkotlinx/coroutines/CoroutineScope;
+}
+
