@@ -1,13 +1,15 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-
 plugins {
     kotlin("multiplatform")
+    id("com.android.library")
     id("org.jetbrains.kotlinx.atomicfu")
+    id("org.jetbrains.kotlinx.binary-compatibility-validator")
     `maven-publish`
 }
 
 kotlin {
     jvm()
+    androidTarget()
+
     linuxX64()
     linuxX64()
 
@@ -24,10 +26,6 @@ kotlin {
     watchosSimulatorArm64()
     watchosDeviceArm64()
 
-    /*
-    Dependencies
-     */
-
     sourceSets.commonMain.dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
     }
@@ -36,20 +34,4 @@ kotlin {
         implementation(kotlin("test"))
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
     }
-
-    /*
-    Compiler Options
-     */
-
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    compilerOptions {
-        explicitApi()
-    }
-
-    /*
-    Jvm Options
-     */
-
-    jvmToolchain(17)
 }
-

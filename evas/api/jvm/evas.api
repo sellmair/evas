@@ -1,0 +1,101 @@
+public final class io/sellmair/evas/ColdStateProducerImpl : io/sellmair/evas/StateProducer {
+	public synthetic fun <init> (Lkotlinx/coroutines/CoroutineScope;Lkotlin/reflect/KClass;JLkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lkotlinx/coroutines/CoroutineScope;Lkotlin/reflect/KClass;JLkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun launchIfApplicable (Lio/sellmair/evas/State$Key;Lkotlinx/coroutines/flow/MutableStateFlow;)V
+}
+
+public final class io/sellmair/evas/ColdStateProducerKt {
+	public static final fun launchStateProducer-WPi__2c (Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;JLkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/reflect/KClass;)Lkotlinx/coroutines/Job;
+}
+
+public abstract interface class io/sellmair/evas/Event {
+}
+
+public abstract interface class io/sellmair/evas/Events : kotlin/coroutines/CoroutineContext$Element {
+	public static final field Key Lio/sellmair/evas/Events$Key;
+	public abstract fun emit (Lio/sellmair/evas/Event;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun getKey ()Lkotlin/coroutines/CoroutineContext$Key;
+}
+
+public final class io/sellmair/evas/Events$DefaultImpls {
+	public static fun fold (Lio/sellmair/evas/Events;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public static fun get (Lio/sellmair/evas/Events;Lkotlin/coroutines/CoroutineContext$Key;)Lkotlin/coroutines/CoroutineContext$Element;
+	public static fun getKey (Lio/sellmair/evas/Events;)Lkotlin/coroutines/CoroutineContext$Key;
+	public static fun minusKey (Lio/sellmair/evas/Events;Lkotlin/coroutines/CoroutineContext$Key;)Lkotlin/coroutines/CoroutineContext;
+	public static fun plus (Lio/sellmair/evas/Events;Lkotlin/coroutines/CoroutineContext;)Lkotlin/coroutines/CoroutineContext;
+}
+
+public final class io/sellmair/evas/Events$Key : kotlin/coroutines/CoroutineContext$Key {
+}
+
+public final class io/sellmair/evas/EventsKt {
+	public static final fun Events ()Lio/sellmair/evas/Events;
+	public static final fun emit (Lio/sellmair/evas/Event;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getEmit (Lkotlinx/coroutines/flow/FlowCollector;)Lkotlin/jvm/functions/Function2;
+	public static final fun getEvents (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/Events;
+}
+
+public final class io/sellmair/evas/EventsKt$sam$i$kotlinx_coroutines_flow_FlowCollector$0 : kotlin/jvm/internal/FunctionAdapter, kotlinx/coroutines/flow/FlowCollector {
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public final synthetic fun emit (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun equals (Ljava/lang/Object;)Z
+	public final fun getFunctionDelegate ()Lkotlin/Function;
+	public final fun hashCode ()I
+}
+
+public final class io/sellmair/evas/HotStateProducerKt {
+	public static final fun launchStateProducer (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/flow/SharingStarted;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
+	public static synthetic fun launchStateProducer$default (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/flow/SharingStarted;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+}
+
+public final class io/sellmair/evas/OnInactive {
+	public static final field INSTANCE Lio/sellmair/evas/OnInactive;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun keepValue ()Lkotlin/jvm/functions/Function3;
+	public final fun resetValue ()Lkotlin/jvm/functions/Function3;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/sellmair/evas/State {
+}
+
+public abstract interface class io/sellmair/evas/State$Key {
+	public abstract fun getDefault ()Lio/sellmair/evas/State;
+}
+
+public final class io/sellmair/evas/StateProducerScope {
+	public final fun emit (Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun emitAll (Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class io/sellmair/evas/States : kotlin/coroutines/CoroutineContext$Element {
+	public static final field Key Lio/sellmair/evas/States$Key;
+	public abstract fun getKey ()Lkotlin/coroutines/CoroutineContext$Key;
+	public abstract fun getState (Lio/sellmair/evas/State$Key;)Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun setState (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;)V
+	public abstract fun setState (Lio/sellmair/evas/State$Key;Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/sellmair/evas/States$DefaultImpls {
+	public static fun fold (Lio/sellmair/evas/States;Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public static fun get (Lio/sellmair/evas/States;Lkotlin/coroutines/CoroutineContext$Key;)Lkotlin/coroutines/CoroutineContext$Element;
+	public static fun getKey (Lio/sellmair/evas/States;)Lkotlin/coroutines/CoroutineContext$Key;
+	public static fun minusKey (Lio/sellmair/evas/States;Lkotlin/coroutines/CoroutineContext$Key;)Lkotlin/coroutines/CoroutineContext;
+	public static fun plus (Lio/sellmair/evas/States;Lkotlin/coroutines/CoroutineContext;)Lkotlin/coroutines/CoroutineContext;
+}
+
+public final class io/sellmair/evas/States$Key : kotlin/coroutines/CoroutineContext$Key {
+}
+
+public final class io/sellmair/evas/StatesKt {
+	public static final fun States ()Lio/sellmair/evas/States;
+	public static final fun get (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getStates (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
+	public static final fun set (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface annotation class io/sellmair/evas/UnstableEvasApi : java/lang/annotation/Annotation {
+}
+
