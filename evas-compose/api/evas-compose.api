@@ -5,12 +5,14 @@ public final class io/sellmair/evas/compose/ComposeExtensionsKt {
 }
 
 public final class io/sellmair/evas/compose/CompositionLocalsKt {
-	public static final fun events (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/Events;
+	public static final fun eventsOrNull (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/Events;
+	public static final fun eventsOrThrow (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/Events;
 	public static final fun getLocalEvents ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun getLocalStates ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 	public static final fun installEvents (Lio/sellmair/evas/Events;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
 	public static final fun installStates (Lio/sellmair/evas/States;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
-	public static final fun states (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/States;
+	public static final fun statesOrNull (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/States;
+	public static final fun statesOrThrow (Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/States;
 }
 
 public final class io/sellmair/evas/compose/RememberEvasCoroutineScopeKt {

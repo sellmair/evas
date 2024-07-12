@@ -14,8 +14,8 @@ import kotlin.coroutines.EmptyCoroutineContext
 public inline fun rememberEvasCoroutineScope(
     crossinline getContext: @DisallowComposableCalls () -> CoroutineContext = { EmptyCoroutineContext }
 ): CoroutineScope {
-    val events = events()
-    val states = states()
+    val events = eventsOrNull() ?: EmptyCoroutineContext
+    val states = statesOrNull() ?: EmptyCoroutineContext
     return rememberCoroutineScope {
         events + states + getContext()
     }

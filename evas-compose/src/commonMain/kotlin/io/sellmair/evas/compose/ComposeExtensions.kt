@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 public fun <T : State?> State.Key<T>.get(): StateFlow<T> {
-    return states().getState<T>(this)
+    return statesOrThrow().getState(this)
 }
 
 @Composable
 public fun <T : State?> State.Key<T>.set(value: T) {
-    return states().setState(this, value)
+    statesOrThrow().setState(this, value)
 }
 
 @Composable
