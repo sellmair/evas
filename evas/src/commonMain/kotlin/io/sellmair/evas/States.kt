@@ -69,14 +69,17 @@ internal class StatesImpl : States {
     }
 }
 
-public val CoroutineContext.states: States
-    get() = this[States] ?: error("Missing ${States::class.simpleName}")
+public val CoroutineContext.statesOrThrow: States
+    get() = this[States]
+        ?: throw MissingStatesException("Missing ${States::class.simpleName} in coroutine context")
 
+public val CoroutineContext.statesOrNull: States?
+    get() = this[States]
 
 public suspend fun <T : State?> State.Key<T>.get(): StateFlow<T> {
-    return coroutineContext.states.getState(this)
+    return coroutineContext.statesOrThrow.getState(this)
 }
 
 public suspend fun <T : State?> State.Key<T>.set(value: T) {
-    return coroutineContext.states.setState(this, value)
+    return coroutineContext.statesOrThrow.setState(this, value)
 }

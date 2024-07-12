@@ -20,7 +20,7 @@ public fun <T : State?> CoroutineScope.launchStateProducer(
     val hotFlow = stateProducerFlow(produce).shareIn(coroutineScope, started, replay = 1)
 
     coroutineScope.launch {
-        currentCoroutineContext().states.setState(key, hotFlow)
+        currentCoroutineContext().statesOrThrow.setState(key, hotFlow)
     }
 
     return coroutineScope.coroutineContext.job

@@ -8,6 +8,13 @@ public final class io/sellmair/evas/ColdStateProducerKt {
 	public static final fun launchStateProducer-WPi__2c (Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;JLkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/reflect/KClass;)Lkotlinx/coroutines/Job;
 }
 
+public class io/sellmair/evas/EvasException : java/lang/Exception {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
 public abstract interface class io/sellmair/evas/Event {
 }
 
@@ -33,7 +40,8 @@ public final class io/sellmair/evas/EventsKt {
 	public static final fun Events ()Lio/sellmair/evas/Events;
 	public static final fun emit (Lio/sellmair/evas/Event;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun getEmit (Lkotlinx/coroutines/flow/FlowCollector;)Lkotlin/jvm/functions/Function2;
-	public static final fun getEvents (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/Events;
+	public static final fun getEventsOrNull (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/Events;
+	public static final fun getEventsOrThrow (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/Events;
 }
 
 public final class io/sellmair/evas/EventsKt$sam$i$kotlinx_coroutines_flow_FlowCollector$0 : kotlin/jvm/internal/FunctionAdapter, kotlinx/coroutines/flow/FlowCollector {
@@ -47,6 +55,14 @@ public final class io/sellmair/evas/EventsKt$sam$i$kotlinx_coroutines_flow_FlowC
 public final class io/sellmair/evas/HotStateProducerKt {
 	public static final fun launchStateProducer (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/flow/SharingStarted;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
 	public static synthetic fun launchStateProducer$default (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/flow/SharingStarted;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+}
+
+public final class io/sellmair/evas/MissingEventsException : io/sellmair/evas/EvasException {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class io/sellmair/evas/MissingStatesException : io/sellmair/evas/EvasException {
+	public fun <init> (Ljava/lang/String;)V
 }
 
 public final class io/sellmair/evas/OnInactive {
@@ -92,7 +108,8 @@ public final class io/sellmair/evas/States$Key : kotlin/coroutines/CoroutineCont
 public final class io/sellmair/evas/StatesKt {
 	public static final fun States ()Lio/sellmair/evas/States;
 	public static final fun get (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun getStates (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
+	public static final fun getStatesOrNull (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
+	public static final fun getStatesOrThrow (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
 	public static final fun set (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

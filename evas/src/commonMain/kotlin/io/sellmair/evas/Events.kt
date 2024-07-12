@@ -30,11 +30,16 @@ private class EventsImpl : Events {
     }
 }
 
-public val CoroutineContext.events: Events
-    get() = this[Events] ?: error("Missing ${Events::class.simpleName}")
+public val CoroutineContext.eventsOrNull: Events?
+    get() = this[Events]
+
+public val CoroutineContext.eventsOrThrow: Events
+    get() = this[Events] ?: throw MissingEventsException(
+        "Missing ${Events::class.simpleName} in coroutine context"
+    )
 
 public suspend inline fun <reified T : Event> events(): Flow<T> {
-    return coroutineContext.events.events.filterIsInstance<T>().buffer(Channel.UNLIMITED)
+    return coroutineContext.eventsOrThrow.events.filterIsInstance<T>().buffer(Channel.UNLIMITED)
 }
 
 public suspend inline fun <reified T : Event> collectEvents(noinline collector: suspend (T) -> Unit) {
@@ -47,7 +52,7 @@ public inline fun <reified T : Event> CoroutineScope.collectEventsAsync(
 ): Job = launch(context = context) { collectEvents<T>(collector) }
 
 public suspend fun Event.emit() {
-    coroutineContext.events.emit(this)
+    coroutineContext.eventsOrThrow.emit(this)
 }
 
 @UnstableEvasApi

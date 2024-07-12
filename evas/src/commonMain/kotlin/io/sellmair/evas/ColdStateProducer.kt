@@ -38,11 +38,11 @@ internal fun <K : State.Key<T>, T : State?> CoroutineScope.launchStateProducer(
         onInactive = onInactive,
         onActive = produce,
     )
-    newCoroutineContext.states.internal.registerProducer(producer)
+    newCoroutineContext.statesOrThrow.internal.registerProducer(producer)
 
     /* Unregister if the job was canceled */
     newCoroutineContext.job.invokeOnCompletion {
-        newCoroutineContext.states.internal.unregisterProducer(producer)
+        newCoroutineContext.statesOrThrow.internal.unregisterProducer(producer)
     }
 
     return newCoroutineContext.job

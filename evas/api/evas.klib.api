@@ -52,6 +52,21 @@ final class <#A: io.sellmair.evas/State?> io.sellmair.evas/StateProducerScope { 
     final suspend fun emitAll(kotlinx.coroutines.flow/Flow<#A>) // io.sellmair.evas/StateProducerScope.emitAll|emitAll(kotlinx.coroutines.flow.Flow<1:0>){}[0]
 }
 
+final class io.sellmair.evas/MissingEventsException : io.sellmair.evas/EvasException { // io.sellmair.evas/MissingEventsException|null[0]
+    constructor <init>(kotlin/String) // io.sellmair.evas/MissingEventsException.<init>|<init>(kotlin.String){}[0]
+}
+
+final class io.sellmair.evas/MissingStatesException : io.sellmair.evas/EvasException { // io.sellmair.evas/MissingStatesException|null[0]
+    constructor <init>(kotlin/String) // io.sellmair.evas/MissingStatesException.<init>|<init>(kotlin.String){}[0]
+}
+
+open class io.sellmair.evas/EvasException : kotlin/Exception { // io.sellmair.evas/EvasException|null[0]
+    constructor <init>() // io.sellmair.evas/EvasException.<init>|<init>(){}[0]
+    constructor <init>(kotlin/String) // io.sellmair.evas/EvasException.<init>|<init>(kotlin.String){}[0]
+    constructor <init>(kotlin/String, kotlin/Throwable) // io.sellmair.evas/EvasException.<init>|<init>(kotlin.String;kotlin.Throwable){}[0]
+    constructor <init>(kotlin/Throwable) // io.sellmair.evas/EvasException.<init>|<init>(kotlin.Throwable){}[0]
+}
+
 final object io.sellmair.evas/OnInactive { // io.sellmair.evas/OnInactive|null[0]
     final fun <#A1: io.sellmair.evas/State.Key<#B1>, #B1: io.sellmair.evas/State?> keepValue(): kotlin.coroutines/SuspendFunction2<io.sellmair.evas/StateProducerScope<#B1>, #A1, kotlin/Unit> // io.sellmair.evas/OnInactive.keepValue|keepValue(){0§<io.sellmair.evas.State.Key<0:1>>;1§<io.sellmair.evas.State?>}[0]
     final fun <#A1: io.sellmair.evas/State.Key<#B1>, #B1: io.sellmair.evas/State?> resetValue(): kotlin.coroutines/SuspendFunction2<io.sellmair.evas/StateProducerScope<#B1>, #A1, kotlin/Unit> // io.sellmair.evas/OnInactive.resetValue|resetValue(){0§<io.sellmair.evas.State.Key<0:1>>;1§<io.sellmair.evas.State?>}[0]
@@ -62,10 +77,14 @@ final object io.sellmair.evas/OnInactive { // io.sellmair.evas/OnInactive|null[0
 
 final val io.sellmair.evas/emit // io.sellmair.evas/emit|@kotlinx.coroutines.flow.FlowCollector<0:0>{0§<kotlin.Any?>}emit[0]
     final fun <#A1: kotlin/Any?> (kotlinx.coroutines.flow/FlowCollector<#A1>).<get-emit>(): kotlin.coroutines/SuspendFunction1<#A1, kotlin/Unit> // io.sellmair.evas/emit.<get-emit>|<get-emit>@kotlinx.coroutines.flow.FlowCollector<0:0>(){0§<kotlin.Any?>}[0]
-final val io.sellmair.evas/events // io.sellmair.evas/events|@kotlin.coroutines.CoroutineContext{}events[0]
-    final fun (kotlin.coroutines/CoroutineContext).<get-events>(): io.sellmair.evas/Events // io.sellmair.evas/events.<get-events>|<get-events>@kotlin.coroutines.CoroutineContext(){}[0]
-final val io.sellmair.evas/states // io.sellmair.evas/states|@kotlin.coroutines.CoroutineContext{}states[0]
-    final fun (kotlin.coroutines/CoroutineContext).<get-states>(): io.sellmair.evas/States // io.sellmair.evas/states.<get-states>|<get-states>@kotlin.coroutines.CoroutineContext(){}[0]
+final val io.sellmair.evas/eventsOrNull // io.sellmair.evas/eventsOrNull|@kotlin.coroutines.CoroutineContext{}eventsOrNull[0]
+    final fun (kotlin.coroutines/CoroutineContext).<get-eventsOrNull>(): io.sellmair.evas/Events? // io.sellmair.evas/eventsOrNull.<get-eventsOrNull>|<get-eventsOrNull>@kotlin.coroutines.CoroutineContext(){}[0]
+final val io.sellmair.evas/eventsOrThrow // io.sellmair.evas/eventsOrThrow|@kotlin.coroutines.CoroutineContext{}eventsOrThrow[0]
+    final fun (kotlin.coroutines/CoroutineContext).<get-eventsOrThrow>(): io.sellmair.evas/Events // io.sellmair.evas/eventsOrThrow.<get-eventsOrThrow>|<get-eventsOrThrow>@kotlin.coroutines.CoroutineContext(){}[0]
+final val io.sellmair.evas/statesOrNull // io.sellmair.evas/statesOrNull|@kotlin.coroutines.CoroutineContext{}statesOrNull[0]
+    final fun (kotlin.coroutines/CoroutineContext).<get-statesOrNull>(): io.sellmair.evas/States? // io.sellmair.evas/statesOrNull.<get-statesOrNull>|<get-statesOrNull>@kotlin.coroutines.CoroutineContext(){}[0]
+final val io.sellmair.evas/statesOrThrow // io.sellmair.evas/statesOrThrow|@kotlin.coroutines.CoroutineContext{}statesOrThrow[0]
+    final fun (kotlin.coroutines/CoroutineContext).<get-statesOrThrow>(): io.sellmair.evas/States // io.sellmair.evas/statesOrThrow.<get-statesOrThrow>|<get-statesOrThrow>@kotlin.coroutines.CoroutineContext(){}[0]
 
 final fun <#A: io.sellmair.evas/State.Key<#B>, #B: io.sellmair.evas/State?> (kotlinx.coroutines/CoroutineScope).io.sellmair.evas/launchStateProducer(kotlin.coroutines/CoroutineContext, kotlin.time/Duration, kotlin.coroutines/SuspendFunction2<io.sellmair.evas/StateProducerScope<#B>, #A, kotlin/Unit>, kotlin.coroutines/SuspendFunction2<io.sellmair.evas/StateProducerScope<#B>, #A, kotlin/Unit>, kotlin.reflect/KClass<#A>): kotlinx.coroutines/Job // io.sellmair.evas/launchStateProducer|launchStateProducer@kotlinx.coroutines.CoroutineScope(kotlin.coroutines.CoroutineContext;kotlin.time.Duration;kotlin.coroutines.SuspendFunction2<io.sellmair.evas.StateProducerScope<0:1>,0:0,kotlin.Unit>;kotlin.coroutines.SuspendFunction2<io.sellmair.evas.StateProducerScope<0:1>,0:0,kotlin.Unit>;kotlin.reflect.KClass<0:0>){0§<io.sellmair.evas.State.Key<0:1>>;1§<io.sellmair.evas.State?>}[0]
 final fun <#A: io.sellmair.evas/State?> (kotlinx.coroutines/CoroutineScope).io.sellmair.evas/launchStateProducer(io.sellmair.evas/State.Key<#A>, kotlin.coroutines/CoroutineContext = ..., kotlinx.coroutines.flow/SharingStarted = ..., kotlin.coroutines/SuspendFunction1<io.sellmair.evas/StateProducerScope<#A>, kotlin/Unit>): kotlinx.coroutines/Job // io.sellmair.evas/launchStateProducer|launchStateProducer@kotlinx.coroutines.CoroutineScope(io.sellmair.evas.State.Key<0:0>;kotlin.coroutines.CoroutineContext;kotlinx.coroutines.flow.SharingStarted;kotlin.coroutines.SuspendFunction1<io.sellmair.evas.StateProducerScope<0:0>,kotlin.Unit>){0§<io.sellmair.evas.State?>}[0]
