@@ -5,7 +5,9 @@ import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
+import kotlin.js.JsName
 
+@JsName("createStates")
 public fun States(): States = StatesImpl()
 
 public sealed interface States : CoroutineContext.Element {

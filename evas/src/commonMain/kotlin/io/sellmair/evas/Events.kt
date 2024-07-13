@@ -8,9 +8,11 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.coroutineContext
+import kotlin.js.JsName
 
 public interface Event
 
+@JsName("createEvents")
 public fun Events(): Events = EventsImpl()
 
 public interface Events : CoroutineContext.Element {

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -26,8 +28,27 @@ kotlin {
     watchosSimulatorArm64()
     watchosDeviceArm64()
 
+    tvosSimulatorArm64()
+    tvosX64()
+    tvosArm64()
+    iosArm64()
+
+    androidNativeArm64()
+    androidNativeX86()
+    androidNativeX64()
+
+    mingwX64()
+
+    js(IR)
+
+    @OptIn(ExperimentalWasmDsl::class)
+    run {
+        wasmJs()
+        wasmWasi()
+    }
+
     sourceSets.commonMain.dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
     }
 
     sourceSets.commonTest.dependencies {
