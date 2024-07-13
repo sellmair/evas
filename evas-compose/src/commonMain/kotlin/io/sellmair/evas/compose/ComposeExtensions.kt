@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import io.sellmair.evas.State
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 public fun <T : State?> State.Key<T>.get(): StateFlow<T> {
@@ -23,4 +26,12 @@ public fun <T : State?> State.Key<T>.collectAsState(): androidx.compose.runtime.
 @Composable
 public fun <T : State?> State.Key<T>.collectAsValue(): T {
     return get().collectAsState().value
+}
+
+@Composable
+public fun LaunchingEvents(context: CoroutineContext = EmptyCoroutineContext, effect: suspend () -> Unit): () -> Unit {
+    val scope = rememberEvasCoroutineScope { context }
+    return {
+        scope.launch { effect() }
+    }
 }

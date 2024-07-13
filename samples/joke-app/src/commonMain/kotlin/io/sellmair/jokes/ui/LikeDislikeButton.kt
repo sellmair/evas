@@ -6,12 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import io.sellmair.evas.compose.LaunchingEvents
 import io.sellmair.evas.compose.collectAsValue
-import io.sellmair.evas.compose.rememberEvasCoroutineScope
 import io.sellmair.evas.emit
 import io.sellmair.jokes.CurrentJokeState
 import io.sellmair.jokes.LikeDislikeEvent
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -19,7 +18,6 @@ fun LikeDislikeButton(
     rating: LikeDislikeEvent.Rating,
     content: @Composable () -> Unit
 ) {
-    val coroutineScope = rememberEvasCoroutineScope()
     val currentJokeState = CurrentJokeState.collectAsValue()
 
     Button(
@@ -31,10 +29,8 @@ fun LikeDislikeButton(
                 LikeDislikeEvent.Rating.Dislike -> Color.Red
             }
         ),
-        onClick = {
-            coroutineScope.launch {
-                LikeDislikeEvent(rating).emit()
-            }
+        onClick = LaunchingEvents {
+            LikeDislikeEvent(rating).emit()
         },
         modifier = Modifier.testTag(
             when (rating) {
