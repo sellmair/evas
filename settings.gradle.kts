@@ -68,6 +68,7 @@ Declare subprojects
  */
 include(":evas")
 include(":evas-compose")
+include(":samples:joke-app")
 
 
 /* Default Kotlin Settings */
@@ -87,7 +88,9 @@ gradle.lifecycle.beforeProject {
              */
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             compilerOptions {
-                explicitApi()
+                if(!project.path.startsWith(":samples")) {
+                    explicitApi()
+                }
             }
         }
     }
