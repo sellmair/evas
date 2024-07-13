@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,13 +30,21 @@ fun JokeCard(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             when (val currentJokeState = CurrentJokeState.collectAsValue()) {
-                is CurrentJokeState.Error -> Text("Error: ${currentJokeState.message}")
-                is CurrentJokeState.Loading -> CircularProgressIndicator()
+                is CurrentJokeState.Error -> Text(
+                    "Error: ${currentJokeState.message}",
+                    Modifier.testTag(UiTags.JokeErrorText.name),
+                )
+
+                is CurrentJokeState.Loading -> CircularProgressIndicator(
+                    Modifier.testTag(UiTags.JokeLoadingSpinner.name)
+                )
+
                 is CurrentJokeState.Joke -> Text(
                     currentJokeState.joke,
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.Light,
-                    fontSize = 24.sp
+                    fontSize = 24.sp,
+                    modifier = Modifier.testTag(UiTags.JokeText.name)
                 )
 
                 null -> Unit

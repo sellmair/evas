@@ -20,6 +20,15 @@ public fun installEvents(events: Events, child: @Composable () -> Unit) {
 }
 
 @Composable
+public fun installEvas(events: Events, states: States, child: @Composable () -> Unit) {
+    installEvents(events) {
+        installStates(states) {
+            child()
+        }
+    }
+}
+
+@Composable
 public fun eventsOrNull(): Events? = LocalEvents.current
 
 @Composable
