@@ -20,3 +20,7 @@ public fun <T : State?> State.Key<T>.collectAsState(): androidx.compose.runtime.
     return get().collectAsState()
 }
 
+@Composable
+public fun <T : State?> State.Key<T>.collectAsValue(): T {
+    return get().collectAsState().value
+}

@@ -1,5 +1,6 @@
 public final class io/sellmair/evas/compose/ComposeExtensionsKt {
 	public static final fun collectAsState (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Landroidx/compose/runtime/State;
+	public static final fun collectAsValue (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/State;
 	public static final fun get (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Lkotlinx/coroutines/flow/StateFlow;
 	public static final fun set (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Landroidx/compose/runtime/Composer;I)V
 }
