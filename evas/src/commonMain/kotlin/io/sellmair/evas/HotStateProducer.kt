@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.shareIn
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-public typealias Producer<K, T> = suspend StateProducerScope<T>.(key: K) -> Unit
-
 public fun <T : State?> CoroutineScope.launchStateProducer(
     key: State.Key<T>,
     coroutineContext: CoroutineContext = EmptyCoroutineContext,
