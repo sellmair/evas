@@ -125,25 +125,42 @@ public sealed interface States : CoroutineContext.Element {
     public companion object Key : CoroutineContext.Key<States>
 }
 
-internal val States.internal: StatesImpl
-    get() = when (this) {
-        is StatesImpl -> this
-    }
-
+/**
+ * @returns the [States] instance installed in the current coroutine context.
+ * @throws MissingStatesException if there is no [States] instance available
+ * @see statesOrNull
+ */
 public val CoroutineContext.statesOrThrow: States
     get() = this[States]
         ?: throw MissingStatesException("Missing ${States::class.simpleName} in coroutine context")
 
+/**
+ * @returns the [States] instance installed in the current coroutine context or null.
+ * @see statesOrThrow
+ */
 public val CoroutineContext.statesOrNull: States?
     get() = this[States]
 
+/**
+ * @return the state associated with the given [Key] as [StateFlow].
+ * @throws [MissingStatesException] if there is no [States] instance installed in the current coroutine context.
+ */
 public suspend fun <T : State?> Key<T>.get(): StateFlow<T> {
     return coroutineContext.statesOrThrow.getState(this)
 }
 
+/**
+ * See [States.setState]
+ * @throws [MissingStatesException] if there is no [States] instance installed in the current coroutine context
+ */
 public suspend fun <T : State?> Key<T>.set(value: T) {
     return coroutineContext.statesOrThrow.setState(this, value)
 }
+
+internal val States.internal: StatesImpl
+    get() = when (this) {
+        is StatesImpl -> this
+    }
 
 internal sealed interface StateProducer {
     fun <T : State?> launchIfApplicable(key: Key<T>, state: MutableStateFlow<T>)
