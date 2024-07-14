@@ -1,7 +1,6 @@
 package io.sellmair.evas
 
 import io.sellmair.evas.State.Key
-import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Marker interface for every state which can be held in [States]
