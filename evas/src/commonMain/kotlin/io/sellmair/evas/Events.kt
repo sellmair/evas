@@ -53,7 +53,7 @@ public fun Events(): Events = EventsImpl()
  *
  * ### Installing in the current coroutine context:
  * Whilst it is possible to pass the [Events] instance around, using any kind of dependency injection
- * mechanism, an easier and more pragmatic is installing the event bus in the current coroutine contest
+ * mechanism, an easier and more pragmatic way is installing the event bus in the current coroutine context.
  *
  * ```kotlin
  * suspend fun main() {
