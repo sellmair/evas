@@ -8,11 +8,13 @@ import kotlin.coroutines.coroutineContext
 import kotlin.reflect.KClass
 import kotlin.time.Duration
 
+public typealias ColdStateProducer<K, T> = suspend StateProducerScope<T>.(key: K) -> Unit
+
 public inline fun <reified K : State.Key<T>, T : State?> CoroutineScope.launchStateProducer(
     coroutineContext: CoroutineContext = EmptyCoroutineContext,
     keepActive: Duration = Duration.ZERO,
     noinline onInactive: suspend StateProducerScope<T>.(key: K) -> Unit = OnInactive.resetValue(),
-    noinline produce: suspend StateProducerScope<T>.(key: K) -> Unit
+    noinline produce: ColdStateProducer<K, T>
 ): Job = launchStateProducer(
     coroutineContext = coroutineContext,
     keepActive = keepActive,
@@ -25,8 +27,8 @@ public inline fun <reified K : State.Key<T>, T : State?> CoroutineScope.launchSt
 internal fun <K : State.Key<T>, T : State?> CoroutineScope.launchStateProducer(
     coroutineContext: CoroutineContext,
     keepActive: Duration,
-    onInactive: suspend StateProducerScope<T>.(key: K) -> Unit,
-    produce: suspend StateProducerScope<T>.(key: K) -> Unit,
+    onInactive: ColdStateProducer<K, T>,
+    produce: ColdStateProducer<K, T>,
     keyClazz: KClass<K>
 ): Job {
     val newCoroutineContext = (this.coroutineContext + coroutineContext).let { base -> base + Job(base.job) }
@@ -53,8 +55,8 @@ internal class ColdStateProducerImpl<K : State.Key<T>, T : State?>(
     private val coroutineScope: CoroutineScope,
     private val keyClazz: KClass<K>,
     private val keepActive: Duration = Duration.ZERO,
-    private val onInactive: suspend StateProducerScope<T>.(key: K) -> Unit,
-    private val onActive: suspend StateProducerScope<T>.(key: K) -> Unit
+    private val onInactive: ColdStateProducer<K, T>,
+    private val onActive: ColdStateProducer<K, T>
 ) : StateProducer {
     @Suppress("UNCHECKED_CAST")
     override fun <X : State?> launchIfApplicable(key: State.Key<X>, state: MutableStateFlow<X>) {

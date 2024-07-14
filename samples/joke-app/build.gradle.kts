@@ -47,7 +47,6 @@ kotlin {
         implementation("io.ktor:ktor-client-cio:$ktorClientVersion")
     }
 
-
     sourceSets.jvmMain.dependencies {
         implementation(compose.desktop.currentOs)
         implementation("io.ktor:ktor-client-cio:$ktorClientVersion")
