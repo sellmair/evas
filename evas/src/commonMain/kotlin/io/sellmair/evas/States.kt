@@ -150,6 +150,16 @@ public suspend fun <T : State?> Key<T>.get(): StateFlow<T> {
 }
 
 /**
+ * Shortcut for `get().collect(collector)`
+ * See [get]
+ * See [Flow.collect]
+ */
+public suspend fun <T : State?> Key<T>.collect(collector: FlowCollector<T>) {
+    get().collect(collector)
+}
+
+
+/**
  * See [States.setState]
  * @throws [MissingStatesException] if there is no [States] instance installed in the current coroutine context
  */

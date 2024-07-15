@@ -1,13 +1,17 @@
 package io.sellmair.evas
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlin.coroutines.CoroutineContext
 import kotlin.experimental.ExperimentalTypeInference
 
 public class StateProducerScope<T : State?> internal constructor(
     private val scope: ProducerScope<T>
-)  {
+) : CoroutineScope {
+    override val coroutineContext: CoroutineContext = scope.coroutineContext
+
     public suspend fun T.emit(): Unit = scope.channel.send(this)
 
     public suspend infix fun emitAll(flow: Flow<T>) {
