@@ -1,10 +1,18 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.gradle.LibraryExtension
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinMultiplatform
+import com.vanniktech.maven.publish.SonatypeHost.Companion.CENTRAL_PORTAL
 import kotlinx.validation.ExperimentalBCVApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
+import org.jetbrains.kotlin.wasm.ir.WasmDataMode
+import org.jreleaser.gradle.plugin.JReleaserExtension
+import org.jreleaser.gradle.plugin.JReleaserPlugin
+import org.jreleaser.model.Active
+import org.jreleaser.model.Signing
 
 rootProject.name = "events and states"
 
@@ -25,12 +33,13 @@ pluginManagement {
     }
 }
 
-
 buildscript {
     dependencies {
         classpath(kotlin("gradle-plugin:2.0.0"))
         classpath("com.android.tools.build:gradle:8.5.1")
         classpath("org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:0.15.1")
+        classpath("org.jreleaser:jreleaser-gradle-plugin:1.13.1")
+        classpath("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.29.0")
     }
 
     repositories {
@@ -43,6 +52,7 @@ buildscript {
         }
 
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
@@ -136,10 +146,11 @@ gradle.lifecycle.beforeProject {
 Publishing
 */
 gradle.lifecycle.beforeProject {
-    version = "1.0.0-SNAPSHOT"
+    version = providers.gradleProperty("evas.version").get()
     group = "io.sellmair"
 
     plugins.withType<MavenPublishPlugin>().configureEach {
+        /* Publish locally to the 'build/repository' folder. Can be useful to check publication issues locally */
         extensions.configure<PublishingExtension> {
             repositories {
                 maven(rootDir.resolve("build/repository")) {
@@ -147,12 +158,48 @@ gradle.lifecycle.beforeProject {
                 }
             }
 
+            /* Publish to GitHub packages */
             repositories {
                 maven("https://maven.pkg.github.com/sellmair/evas") {
                     name = "github"
                     credentials {
                         username = providers.gradleProperty("evas.github.user").orNull
                         password = providers.gradleProperty("evas.github.token").orNull
+                    }
+                }
+            }
+        }
+    }
+
+    /* Publish to maven central */
+    plugins.withType<com.vanniktech.maven.publish.MavenPublishPlugin>().all {
+        extensions.configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
+            publishToMavenCentral(CENTRAL_PORTAL)
+            signAllPublications()
+            configure(KotlinMultiplatform(sourcesJar = true))
+
+            pom {
+                name = "Evas"
+                inceptionYear = "2024"
+                url = "https://github.com/sellmair/evas"
+                description = provider { project.description }
+
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+
+                scm {
+                    url = "https://github.com/sellmair/evas"
+                }
+
+                developers {
+                    developer {
+                        id = "sellmair"
+                        name = "Sebastian Sellmair"
+                        email = "sebastian@sellmair.io"
                     }
                 }
             }

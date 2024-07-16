@@ -6,7 +6,10 @@ plugins {
     id("org.jetbrains.kotlinx.atomicfu")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
     `maven-publish`
+    com.vanniktech.maven.publish
 }
+
+description = "Events and States Library for Kotlin (Multiplatform)"
 
 kotlin {
     jvm()

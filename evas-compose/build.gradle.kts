@@ -4,7 +4,10 @@ plugins {
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
     `maven-publish`
+    com.vanniktech.maven.publish
 }
+
+description = "Compose (Multiplatform) extensions for evas"
 
 kotlin {
     jvm()
@@ -21,3 +24,4 @@ kotlin {
         compileOnly(compose.foundation)
     }
 }
+
