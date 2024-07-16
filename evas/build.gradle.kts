@@ -4,7 +4,8 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.kotlinx.atomicfu")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator")
+    org.jetbrains.kotlinx.`binary-compatibility-validator`
+    org.jetbrains.kotlinx.benchmark
     `maven-publish`
     com.vanniktech.maven.publish
 }
@@ -57,5 +58,23 @@ kotlin {
     sourceSets.commonTest.dependencies {
         implementation(kotlin("test"))
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0-RC")
+    }
+}
+
+
+/* Configure Benchmarking */
+run {
+    kotlin.jvm().compilations.create("benchmark") {
+        associateWith(kotlin.jvm().compilations.getByName("main"))
+    }
+
+    kotlin.sourceSets.getByName("jvmBenchmark").dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.11")
+    }
+
+    benchmark {
+        targets {
+            register("jvmBenchmark")
+        }
     }
 }

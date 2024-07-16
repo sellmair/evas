@@ -1,18 +1,12 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.gradle.LibraryExtension
-import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinMultiplatform
 import com.vanniktech.maven.publish.SonatypeHost.Companion.CENTRAL_PORTAL
 import kotlinx.validation.ExperimentalBCVApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
-import org.jetbrains.kotlin.wasm.ir.WasmDataMode
-import org.jreleaser.gradle.plugin.JReleaserExtension
-import org.jreleaser.gradle.plugin.JReleaserPlugin
-import org.jreleaser.model.Active
-import org.jreleaser.model.Signing
 
 rootProject.name = "events and states"
 
@@ -40,6 +34,7 @@ buildscript {
         classpath("org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:0.15.1")
         classpath("org.jreleaser:jreleaser-gradle-plugin:1.13.1")
         classpath("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.29.0")
+        classpath("org.jetbrains.kotlinx.benchmark:org.jetbrains.kotlinx.benchmark.gradle.plugin:0.4.11")
     }
 
     repositories {
