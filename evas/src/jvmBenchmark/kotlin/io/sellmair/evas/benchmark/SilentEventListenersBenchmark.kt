@@ -16,7 +16,7 @@ import kotlinx.coroutines.*
 @State(Scope.Benchmark)
 open class SilentEventListenersBenchmark {
 
-    @Param("100", "100000", "1000000")
+    @Param("100", "1000")
     var silentListeners: Int = 0
 
     private lateinit var events: Events
@@ -32,8 +32,14 @@ open class SilentEventListenersBenchmark {
         events = Events()
         coroutineScope = CoroutineScope(Dispatchers.Default + Job() + events)
 
+        coroutineScope.collectEventsAsync<EmittedEvent>(start = CoroutineStart.UNDISPATCHED) {
+            Blackhole.consumeCPU(1)
+        }
+
         repeat(silentListeners) {
-            coroutineScope.collectEventsAsync<NeverEvent> { _ -> Blackhole.consumeCPU(1) }
+            coroutineScope.collectEventsAsync<NeverEvent>(start = CoroutineStart.UNDISPATCHED) {
+                Blackhole.consumeCPU(1)
+            }
         }
     }
 
