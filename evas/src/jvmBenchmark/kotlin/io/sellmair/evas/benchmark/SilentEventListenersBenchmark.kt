@@ -9,6 +9,12 @@ import io.sellmair.evas.emit
 import kotlinx.benchmark.*
 import kotlinx.coroutines.*
 
+/*
+16.07.24, Mac Studio:
+Benchmark                                             (silentListeners)   Mode  Cnt        Score       Error  Units
+SilentEventListenersBenchmark.benchmarkEmittingEvent                100  thrpt   20  1497191.416 ± 57396.076  ops/s
+SilentEventListenersBenchmark.benchmarkEmittingEvent               1000  thrpt   20  1460679.549 ± 30921.727  ops/s
+ */
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(BenchmarkTimeUnit.SECONDS)
 @Warmup(iterations = 10, time = 500, timeUnit = BenchmarkTimeUnit.MILLISECONDS)

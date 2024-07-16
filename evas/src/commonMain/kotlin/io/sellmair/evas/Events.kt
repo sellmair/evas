@@ -1,5 +1,7 @@
 package io.sellmair.evas
 
+import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -7,6 +9,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.coroutineContext
 import kotlin.js.JsName
+import kotlin.reflect.KClass
+import kotlin.reflect.safeCast
 
 /**
  * Marker interface for all events which can be dispatched with evas.
@@ -143,15 +147,28 @@ public fun Events(): Events = EventsImpl()
  */
 public sealed interface Events : CoroutineContext.Element {
     override val key: CoroutineContext.Key<*> get() = Key
-    public val events: SharedFlow<Event>
     public suspend fun emit(event: Event)
+
+    public fun <T : Event> events(clazz: KClass<T>): Flow<T>
 
     public companion object Key : CoroutineContext.Key<Events>
 }
 
 private class EventsImpl : Events {
     private val eventsImpl = MutableSharedFlow<Event>()
-    override val events: SharedFlow<Event> = eventsImpl.asSharedFlow()
+    private val events: SharedFlow<Event> = eventsImpl.asSharedFlow()
+
+    private val typedEventFlows = mutableMapOf<KClass<*>, SharedFlow<*>>()
+    private val typedEventFlowsLock = reentrantLock()
+
+    override fun <T : Event> events(clazz: KClass<T>): Flow<T> = typedEventFlowsLock.withLock {
+        @Suppress("UNCHECKED_CAST")
+        typedEventFlows.getOrPut(clazz) {
+            events.mapNotNull { event -> clazz.safeCast(event) }
+                .buffer(Channel.UNLIMITED)
+                .shareIn(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined), SharingStarted.WhileSubscribed())
+        } as SharedFlow<T>
+    }
 
     override suspend fun emit(event: Event) {
         eventsImpl.emit(event)
@@ -179,7 +196,7 @@ public val CoroutineContext.eventsOrThrow: Events
  * The buffer is 'unlimited', events will be processed in order.
  */
 public suspend inline fun <reified T : Event> events(): Flow<T> {
-    return coroutineContext.eventsOrThrow.events.filterIsInstance<T>().buffer(Channel.UNLIMITED)
+    return coroutineContext.eventsOrThrow.events(T::class)
 }
 
 /**
