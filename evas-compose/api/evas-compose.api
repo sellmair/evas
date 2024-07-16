@@ -1,5 +1,6 @@
 public final class io/sellmair/evas/compose/ComposeExtensionsKt {
 	public static final fun LaunchingEvents (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)Lkotlin/jvm/functions/Function0;
+	public static final fun LaunchingEvents (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lkotlin/jvm/functions/Function1;
 	public static final fun collectAsState (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Landroidx/compose/runtime/State;
 	public static final fun collectAsValue (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Lio/sellmair/evas/State;
 	public static final fun get (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Lkotlinx/coroutines/flow/StateFlow;
