@@ -1,25 +1,15 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.sellmair.evas
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.takeWhile
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.yield
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -120,7 +110,7 @@ class StatesTest {
     @Test
     fun `test - keepActive`() = runTest(States()) {
         launchStateProducer(keepActive = 3.seconds + 1.milliseconds) { _: ColdState.Key ->
-            while(currentCoroutineContext().isActive) {
+            while (currentCoroutineContext().isActive) {
                 ColdState(currentTime).emit()
                 delay(1.seconds)
             }
@@ -156,7 +146,7 @@ class StatesTest {
         launchStateProducer(keepActive = 2.seconds + 1.milliseconds) { _: ColdState.Key ->
             assertFalse(launched, "Another producer was already launched!")
             launched = true
-            while(currentCoroutineContext().isActive) {
+            while (currentCoroutineContext().isActive) {
                 ColdState(currentTime).emit()
                 delay(1.seconds)
             }

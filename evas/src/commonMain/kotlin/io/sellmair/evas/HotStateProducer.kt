@@ -13,16 +13,15 @@ public fun <T : State?> CoroutineScope.launchStateProducer(
     produce: suspend StateProducerScope<T>.() -> Unit
 ): Job {
     val newCoroutineContext = (this.coroutineContext + coroutineContext).let { base -> base + Job(base.job) }
+    val producerJob = newCoroutineContext.job
+    val states = newCoroutineContext.statesOrThrow
     val coroutineScope = CoroutineScope(newCoroutineContext)
 
     val hotFlow = stateProducerFlow(produce).shareIn(coroutineScope, started, replay = 1)
 
     coroutineScope.launch {
-        currentCoroutineContext().statesOrThrow.setState(key, hotFlow)
+        states.setState(key, hotFlow)
     }
 
-    return coroutineScope.coroutineContext.job
+    return producerJob
 }
-
-
-
