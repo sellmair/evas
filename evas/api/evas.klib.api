@@ -20,11 +20,10 @@ abstract interface io.sellmair.evas/State { // io.sellmair.evas/State|null[0]
 }
 
 sealed interface io.sellmair.evas/Events : kotlin.coroutines/CoroutineContext.Element { // io.sellmair.evas/Events|null[0]
-    abstract val events // io.sellmair.evas/Events.events|{}events[0]
-        abstract fun <get-events>(): kotlinx.coroutines.flow/SharedFlow<io.sellmair.evas/Event> // io.sellmair.evas/Events.events.<get-events>|<get-events>(){}[0]
     open val key // io.sellmair.evas/Events.key|{}key[0]
         open fun <get-key>(): kotlin.coroutines/CoroutineContext.Key<*> // io.sellmair.evas/Events.key.<get-key>|<get-key>(){}[0]
 
+    abstract fun <#A1: io.sellmair.evas/Event> events(kotlin.reflect/KClass<#A1>): kotlinx.coroutines.flow/Flow<#A1> // io.sellmair.evas/Events.events|events(kotlin.reflect.KClass<0:0>){0§<io.sellmair.evas.Event>}[0]
     abstract suspend fun emit(io.sellmair.evas/Event) // io.sellmair.evas/Events.emit|emit(io.sellmair.evas.Event){}[0]
 
     final object Key : kotlin.coroutines/CoroutineContext.Key<io.sellmair.evas/Events> // io.sellmair.evas/Events.Key|null[0]

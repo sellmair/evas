@@ -21,7 +21,7 @@ public abstract interface class io/sellmair/evas/Event {
 public abstract interface class io/sellmair/evas/Events : kotlin/coroutines/CoroutineContext$Element {
 	public static final field Key Lio/sellmair/evas/Events$Key;
 	public abstract fun emit (Lio/sellmair/evas/Event;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun events (Lkotlin/reflect/KClass;)Lkotlinx/coroutines/flow/Flow;
 	public abstract fun getKey ()Lkotlin/coroutines/CoroutineContext$Key;
 }
 
