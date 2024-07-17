@@ -4,6 +4,7 @@ import com.android.build.gradle.LibraryExtension
 import com.vanniktech.maven.publish.KotlinMultiplatform
 import com.vanniktech.maven.publish.SonatypeHost.Companion.CENTRAL_PORTAL
 import kotlinx.validation.ExperimentalBCVApi
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
@@ -98,6 +99,15 @@ gradle.lifecycle.beforeProject {
                 if (!project.path.startsWith(":samples")) {
                     explicitApi()
                 }
+            }
+        }
+
+        /* Tests */
+        tasks.withType<AbstractTestTask>().configureEach {
+            outputs.upToDateWhen { false }
+            testLogging {
+                showStandardStreams = true
+                events = setOf(TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
             }
         }
     }

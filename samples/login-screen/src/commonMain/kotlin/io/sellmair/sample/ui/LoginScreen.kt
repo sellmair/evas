@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -17,6 +16,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,6 +28,7 @@ import io.sellmair.evas.compose.collectAsValue
 import io.sellmair.evas.compose.rememberEvasCoroutineScope
 import io.sellmair.evas.emit
 import io.sellmair.sample.loginScreen.*
+import io.sellmair.sample.ui.Tags.LoginScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -68,7 +69,8 @@ private fun EmailTextField() {
 
     val emailState = EmailState.collectAsValue()
     TextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .testTag(LoginScreen.EmailTextField.name),
         value = emailState.email,
         isError = !emailState.isValid,
         label = { Text("Email") },
@@ -92,7 +94,8 @@ private fun PasswordTextField() {
     var passwordVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberEvasCoroutineScope()
     TextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .testTag(LoginScreen.PasswordTextField.name),
         value = passwordState.password,
         label = { Text("Password") },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -122,12 +125,18 @@ private fun PasswordTextField() {
 
 @Composable
 private fun LoginButton(modifier: Modifier = Modifier) {
+    val emailState = EmailState.collectAsValue()
+    val passwordState = PasswordState.collectAsValue()
+    val userLoginState = UserLoginState.collectAsValue()
+
     Button(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = modifier.fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .testTag(LoginScreen.LoginButton.name),
         onClick = LaunchingEvents { LoginClickedEvent.emit() },
-        enabled = EmailState.collectAsValue().isValid &&
-                PasswordState.collectAsValue().password.isNotEmpty() &&
-                UserLoginState.collectAsValue() is UserLoginState.NotLoggedIn
+        enabled = emailState.isValid &&
+                passwordState.password.isNotEmpty() &&
+                userLoginState is UserLoginState.NotLoggedIn
     ) {
         Text("Login")
     }
@@ -140,12 +149,11 @@ private fun LoginErrorText(modifier: Modifier = Modifier) {
     if (error.isEmpty()) return
 
     Text(
-        modifier = modifier,
+        modifier = modifier.testTag(LoginScreen.LoginErrorText.name),
         text = "Login failed: $error",
         color = MaterialTheme.colors.error,
         fontWeight = FontWeight.Bold
     )
 
     Spacer(modifier = Modifier.height(16.dp))
-
 }
