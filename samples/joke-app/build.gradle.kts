@@ -85,17 +85,20 @@ kotlin {
 
 /* Desktop Options */
 compose.desktop.application {
-    mainClass = "io.sellmair.jokes.MainKt"
+    mainClass = "io.sellmair.jokes.JokesApplicationKt"
+}
+
+kotlin.jvm().mainRun {
+    mainClass = "io.sellmair.jokes.JokesApplicationKt"
 }
 
 /* iOS options */
-kotlin {
-    targets.withType<KotlinNativeTarget>()
-        .matching { it.konanTarget.family == IOS }
-        .configureEach {
-            binaries.framework {
-                baseName = "JokesKt"
-                isStatic = true
-            }
+kotlin.targets.withType<KotlinNativeTarget>()
+    .matching { it.konanTarget.family == IOS }
+    .configureEach {
+        binaries.framework {
+            baseName = "JokesKt"
+            isStatic = true
         }
-}
+    }
+

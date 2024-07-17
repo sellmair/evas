@@ -69,7 +69,6 @@ android {
     namespace = "io.sellmair.loginScreen"
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
         applicationId = "io.sellmair.loginScreenSample"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -91,6 +90,10 @@ kotlin {
 
 /* Desktop Options */
 compose.desktop.application {
+    mainClass = "io.sellmair.sample.SampleApplicationKt"
+}
+
+kotlin.jvm().mainRun {
     mainClass = "io.sellmair.sample.SampleApplicationKt"
 }
 
