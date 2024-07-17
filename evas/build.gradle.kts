@@ -6,8 +6,7 @@ plugins {
     id("org.jetbrains.kotlinx.atomicfu")
     org.jetbrains.kotlinx.`binary-compatibility-validator`
     org.jetbrains.kotlinx.benchmark
-    `maven-publish`
-    com.vanniktech.maven.publish
+    `evas-publish`
 }
 
 description = "Events and States Library for Kotlin (Multiplatform)"
@@ -52,12 +51,12 @@ kotlin {
     }
 
     sourceSets.commonMain.dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+        implementation(deps.coroutines.core)
     }
 
     sourceSets.commonTest.dependencies {
         implementation(kotlin("test"))
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0-RC")
+        implementation(deps.coroutines.test)
     }
 }
 
@@ -69,7 +68,7 @@ run {
     }
 
     kotlin.sourceSets.getByName("jvmBenchmark").dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.4.11")
+        implementation(deps.kotlinxBenchmarkRuntime)
     }
 
     benchmark {

@@ -29,7 +29,7 @@ kotlin {
         implementation(compose.foundation)
         implementation(compose.material)
 
-        implementation("io.ktor:ktor-client-core:$ktorClientVersion")
+        implementation(deps.ktorClientCore)
     }
 
     sourceSets.commonTest.dependencies {
@@ -49,11 +49,12 @@ kotlin {
 
     sourceSets.jvmMain.dependencies {
         implementation(compose.desktop.currentOs)
-        implementation("io.ktor:ktor-client-cio:$ktorClientVersion")
+        implementation(deps.ktorClientCio)
+
     }
 
     sourceSets.appleMain.dependencies {
-        implementation("io.ktor:ktor-client-darwin:$ktorClientVersion")
+        implementation(deps.ktorClientDarwin)
     }
 }
 

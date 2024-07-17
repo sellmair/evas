@@ -33,8 +33,8 @@ kotlin {
         implementation(compose.material)
         implementation(compose.materialIconsExtended)
 
-        implementation("io.ktor:ktor-client-core:$ktorClientVersion")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+        implementation(deps.ktorClientCore)
+        implementation(deps.coroutines.core)
     }
 
     sourceSets.commonTest.dependencies {
@@ -49,13 +49,13 @@ kotlin {
         implementation("androidx.activity:activity-compose:1.9.0")
         implementation("androidx.appcompat:appcompat:1.7.0")
         implementation("androidx.core:core-ktx:1.13.1")
-        implementation("io.ktor:ktor-client-cio:$ktorClientVersion")
+        implementation(deps.ktorClientCio)
     }
 
     sourceSets.jvmMain.dependencies {
         implementation(compose.desktop.currentOs)
-        implementation("io.ktor:ktor-client-cio:$ktorClientVersion")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.0")
+        implementation(deps.coroutines.swing)
+        implementation(deps.ktorClientCio)
     }
 
     sourceSets.appleMain.dependencies {

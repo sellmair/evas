@@ -3,8 +3,7 @@ plugins {
     kotlin("plugin.compose")
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
-    `maven-publish`
-    com.vanniktech.maven.publish
+    `evas-publish`
 }
 
 description = "Compose (Multiplatform) extensions for evas"
