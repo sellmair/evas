@@ -65,11 +65,11 @@ kotlin {
 
 /* Android Options */
 android {
-    compileSdk = 35
+    compileSdk = 34
     namespace = "io.sellmair.loginScreen"
     defaultConfig {
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         applicationId = "io.sellmair.loginScreenSample"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
