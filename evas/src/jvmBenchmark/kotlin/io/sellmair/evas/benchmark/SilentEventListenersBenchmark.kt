@@ -34,17 +34,17 @@ open class SilentEventListenersBenchmark {
     data object EmittedEvent : Event
 
     @Setup
-    fun prepare() {
+    fun prepare(blackhole: Blackhole) {
         events = Events()
         coroutineScope = CoroutineScope(Dispatchers.Default + Job() + events)
 
-        coroutineScope.collectEventsAsync<EmittedEvent>(start = CoroutineStart.UNDISPATCHED) {
-            Blackhole.consumeCPU(1)
+        coroutineScope.collectEventsAsync<EmittedEvent>(start = CoroutineStart.UNDISPATCHED) { event ->
+            blackhole.consume(event)
         }
 
         repeat(silentListeners) {
-            coroutineScope.collectEventsAsync<NeverEvent>(start = CoroutineStart.UNDISPATCHED) {
-                Blackhole.consumeCPU(1)
+            coroutineScope.collectEventsAsync<NeverEvent>(start = CoroutineStart.UNDISPATCHED) { event ->
+                blackhole.consume(event)
             }
         }
     }
@@ -54,6 +54,12 @@ open class SilentEventListenersBenchmark {
         coroutineScope.cancel()
     }
 
+    /*
+    16.07.24, Mac Studio:
+    Benchmark                                             (silentListeners)   Mode  Cnt        Score       Error  Units
+    SilentEventListenersBenchmark.benchmarkEmittingEvent                100  thrpt   20  1497191.416 ± 57396.076  ops/s
+    SilentEventListenersBenchmark.benchmarkEmittingEvent               1000  thrpt   20  1460679.549 ± 30921.727  ops/s
+    */
     @Benchmark
     fun benchmarkEmittingEvent() = runBlocking(events) {
         EmittedEvent.emit()

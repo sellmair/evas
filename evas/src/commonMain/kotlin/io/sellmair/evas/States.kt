@@ -211,6 +211,10 @@ internal class StatesImpl : States {
         return getOrCreateMutableStateFlow(key).asStateFlow()
     }
 
+    internal fun <T: State?> getMutableState(key: Key<T>): MutableStateFlow<T> {
+        return getOrCreateMutableStateFlow(key)
+    }
+
     private fun <T : State?> getOrCreateMutableStateFlow(key: Key<T>): MutableStateFlow<T> = lock.withLock {
         @Suppress("UNCHECKED_CAST")
         return states.getOrPut(key) {

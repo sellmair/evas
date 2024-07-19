@@ -1,12 +1,12 @@
 @file:OptIn(ExperimentalCoroutinesApi::class)
+@file:Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 
 package io.sellmair.evas
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
@@ -175,5 +175,46 @@ class StatesTest {
         assertEquals(null, ColdState.Key().get().value)
 
         coroutineContext.job.cancelChildren()
+    }
+
+    @Test
+    fun `test - hot state producer job - is completed after corotuine finished`() = runTest(States()) {
+        val stateProducerJob = launchStateProducer(HotState, StandardTestDispatcher(testScheduler)) {
+            HotState(42).emit()
+        }
+
+        // Wait for the state
+        HotState.get().first { it == HotState(42) }
+        assertTrue(stateProducerJob.isCompleted, "Expected job to be completed")
+    }
+
+    @Test
+    fun `test - hot state producer is started eagerly`() = runTest(States()) {
+        launchStateProducer(HotState, StandardTestDispatcher(testScheduler)) {
+            HotState(42).emit()
+        }
+
+        testScheduler.advanceUntilIdle()
+        assertEquals(HotState(42), HotState.get().value)
+    }
+
+    @Test
+    fun `test - hot state started lazily`() = runTest(States()) {
+        var isSubscribed = false
+
+        val stateProducerJob = launchStateProducer(HotState, StandardTestDispatcher(testScheduler), StateProducerStarted.lazily()) {
+            assertTrue(isSubscribed, "Expected state producer to only be launched after at least one subscription")
+            HotState(42).emit()
+        }
+        testScheduler.advanceUntilIdle()
+        assertEquals(
+            null, HotState.get().value,
+            "We do not expect any value being emitted, as the state producer was not yet launched"
+        )
+
+        // Start subscribing to the state
+        isSubscribed = true
+        assertEquals(HotState(42), HotState.get().filterNotNull().first())
+        assertTrue(stateProducerJob.isCompleted, "Expected job to be completed")
     }
 }

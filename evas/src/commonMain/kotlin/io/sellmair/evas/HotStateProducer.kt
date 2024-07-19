@@ -1,27 +1,36 @@
 package io.sellmair.evas
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+
 
 public fun <T : State?> CoroutineScope.launchStateProducer(
     key: State.Key<T>,
     coroutineContext: CoroutineContext = EmptyCoroutineContext,
-    started: SharingStarted = SharingStarted.Eagerly,
+    started: StateProducerStarted = StateProducerStarted.Eagerly,
     produce: suspend StateProducerScope<T>.() -> Unit
 ): Job {
-    val newCoroutineContext = (this.coroutineContext + coroutineContext).let { base -> base + Job(base.job) }
-    val producerJob = newCoroutineContext.job
+    val newCoroutineContext = (this.coroutineContext + coroutineContext)
     val states = newCoroutineContext.statesOrThrow
     val coroutineScope = CoroutineScope(newCoroutineContext)
 
-    val hotFlow = stateProducerFlow(produce).shareIn(coroutineScope, started, replay = 1)
+    return when (started) {
+        StateProducerStartedEagerly -> coroutineScope.launch {
+            states.setState(key, stateProducerFlow(produce))
+        }
 
-    coroutineScope.launch {
-        states.setState(key, hotFlow)
+        StateProducerStartedLazily -> coroutineScope.launch {
+            /* We first await at least one subscriber */
+            states.internal.getMutableState(key).subscriptionCount.first { subscriptionsCount ->
+                subscriptionsCount > 0
+            }
+
+            /* Then we can start emitting the state */
+            states.setState(key, stateProducerFlow(produce))
+        }
     }
-
-    return producerJob
 }
