@@ -1,14 +1,8 @@
 package io.sellmair.evas
 
-import kotlin.jvm.JvmStatic
-
 public sealed class StateProducerStarted {
     public companion object {
-
-        @JvmStatic
         public val Eagerly: StateProducerStarted get() = StateProducerStartedEagerly
-
-        @JvmStatic
         public val Lazily: StateProducerStarted get() = StateProducerStartedLazily
     }
 }

@@ -53,8 +53,8 @@ public final class io/sellmair/evas/EventsKt$sam$i$kotlinx_coroutines_flow_FlowC
 }
 
 public final class io/sellmair/evas/HotStateProducerKt {
-	public static final fun launchStateProducer (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/flow/SharingStarted;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
-	public static synthetic fun launchStateProducer$default (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/flow/SharingStarted;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+	public static final fun launchStateProducer (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
+	public static synthetic fun launchStateProducer$default (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
 }
 
 public final class io/sellmair/evas/MissingEventsException : io/sellmair/evas/EvasException {
@@ -85,6 +85,15 @@ public final class io/sellmair/evas/StateProducerScope : kotlinx/coroutines/Coro
 	public final fun emit (Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun emitAll (Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getCoroutineContext ()Lkotlin/coroutines/CoroutineContext;
+}
+
+public abstract class io/sellmair/evas/StateProducerStarted {
+	public static final field Companion Lio/sellmair/evas/StateProducerStarted$Companion;
+}
+
+public final class io/sellmair/evas/StateProducerStarted$Companion {
+	public final fun getEagerly ()Lio/sellmair/evas/StateProducerStarted;
+	public final fun getLazily ()Lio/sellmair/evas/StateProducerStarted;
 }
 
 public abstract interface class io/sellmair/evas/States : kotlin/coroutines/CoroutineContext$Element {
