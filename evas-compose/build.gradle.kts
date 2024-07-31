@@ -20,7 +20,7 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         implementation(project(":evas"))
-        compileOnly(compose.foundation)
+        implementation(compose.foundation)
     }
 }
 

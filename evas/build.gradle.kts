@@ -92,11 +92,3 @@ run {
     }
 }
 
-kotlin {
-    jvm {
-        testRuns["test"].executionTask.configure {
-            maxHeapSize = "3G"
-            maxParallelForks = 12
-        }
-    }
-}
