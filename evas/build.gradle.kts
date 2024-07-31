@@ -77,6 +77,10 @@ run {
         }
 
         configurations {
+            register("emit") {
+                include(".*EmitBenchmark.*")
+            }
+
             register("events") {
                 include(".*\\.events\\..*")
             }
