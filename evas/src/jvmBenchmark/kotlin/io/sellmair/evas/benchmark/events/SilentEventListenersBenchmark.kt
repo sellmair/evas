@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package io.sellmair.evas.benchmark
+package io.sellmair.evas.benchmark.events
 
 import io.sellmair.evas.Event
 import io.sellmair.evas.Events
@@ -61,7 +61,10 @@ open class SilentEventListenersBenchmark {
     SilentEventListenersBenchmark.benchmarkEmittingEvent               1000  thrpt   20  1460679.549 ± 30921.727  ops/s
     */
     @Benchmark
-    fun benchmarkEmittingEvent() = runBlocking(events) {
+    fun emit() = runBlocking(events) {
         EmittedEvent.emit()
     }
+
+    @Benchmark
+    fun emitAsync() = events.emitAsync(EmittedEvent)
 }

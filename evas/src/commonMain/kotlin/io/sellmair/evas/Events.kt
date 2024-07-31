@@ -3,14 +3,16 @@ package io.sellmair.evas
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flow
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.coroutineContext
 import kotlin.js.JsName
 import kotlin.reflect.KClass
-import kotlin.reflect.safeCast
 
 /**
  * Marker interface for all events which can be dispatched with evas.
@@ -148,30 +150,88 @@ public fun Events(): Events = EventsImpl()
 public sealed interface Events : CoroutineContext.Element {
     override val key: CoroutineContext.Key<*> get() = Key
     public suspend fun emit(event: Event)
-
+    public fun emitAsync(event: Event)
     public fun <T : Event> events(clazz: KClass<T>): Flow<T>
 
     public companion object Key : CoroutineContext.Key<Events>
 }
 
+private typealias Listener<T> = suspend (T) -> Unit
+
 private class EventsImpl : Events {
-    private val eventsImpl = MutableSharedFlow<Event>()
-    private val events: SharedFlow<Event> = eventsImpl.asSharedFlow()
+    private val unconfinedScope = CoroutineScope(Dispatchers.Unconfined)
+    private val lock = reentrantLock()
+    private val typedListeners = mutableMapOf<KClass<*>, MutableCollection<Listener<Dispatch<*>>>>()
+    private val listeners = LinkedHashSet<Listener<Dispatch<*>>>()
 
-    private val typedEventFlows = mutableMapOf<KClass<*>, SharedFlow<*>>()
-    private val typedEventFlowsLock = reentrantLock()
+    private class Dispatch<out T>(val event: T, val job: CompletableJob?)
 
-    override fun <T : Event> events(clazz: KClass<T>): Flow<T> = typedEventFlowsLock.withLock {
-        @Suppress("UNCHECKED_CAST")
-        typedEventFlows.getOrPut(clazz) {
-            events.mapNotNull { event -> clazz.safeCast(event) }
-                .buffer(Channel.UNLIMITED)
-                .shareIn(CoroutineScope(SupervisorJob() + Dispatchers.Unconfined), SharingStarted.WhileSubscribed())
-        } as SharedFlow<T>
+    override fun <T : Event> events(clazz: KClass<T>): Flow<T> {
+        val channelFlow = channelFlow {
+            val listener: Listener<Dispatch<T>> = listener@{ dispatch ->
+                if (!isActive) return@listener
+                send(dispatch)
+                dispatch.job?.join()
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            listener as Listener<Dispatch<*>>
+            lock.withLock {
+                typedListeners.getOrPut(clazz) { ArrayList() }.add(listener)
+                listeners.add(listener)
+            }
+
+            awaitClose {
+                lock.withLock {
+                    typedListeners[clazz]?.let { set ->
+                        set.remove(listener)
+                        if (set.isEmpty()) typedListeners.remove(clazz)
+                    }
+
+                    listeners.remove(listener)
+                }
+            }
+        }
+
+        return flow {
+            channelFlow.collect { dispatch ->
+                try {
+                    emit(dispatch.event)
+                } finally {
+                    dispatch.job?.complete()
+                }
+            }
+        }
     }
 
     override suspend fun emit(event: Event) {
-        eventsImpl.emit(event)
+        coroutineScope {
+            createListenerQueue(event).forEach { listener ->
+                /* Launching coroutine and waiting for the listener to finish (passing non-null job) */
+                launch { listener(Dispatch(event, Job())) }
+            }
+        }
+    }
+
+    override fun emitAsync(event: Event) {
+        val queue = createListenerQueue(event)
+        queue.forEach { listener ->
+            unconfinedScope.launch {
+                listener(Dispatch(event, null))
+            }
+        }
+    }
+
+    private fun createListenerQueue(event: Event): List<Listener<Dispatch<Event>>> {
+        val listenerQueue = mutableListOf<Listener<Dispatch<Event>>>()
+        lock.withLock {
+            typedListeners.forEach { (clazz, listeners) ->
+                if (clazz.isInstance(event)) {
+                    listenerQueue.addAll(listeners)
+                }
+            }
+        }
+        return listenerQueue
     }
 }
 
@@ -237,9 +297,11 @@ public suspend inline fun <reified T : Event> collectEvents(noinline collector: 
  */
 public inline fun <reified T : Event> CoroutineScope.collectEventsAsync(
     context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
+    start: CoroutineStart = CoroutineStart.UNDISPATCHED,
     noinline collector: suspend (T) -> Unit
-): Job = launch(context = context, start = start) { collectEvents<T>(collector) }
+): Job = launch(context = context, start = start) {
+    collectEvents<T>(collector)
+}
 
 /**
  * Sends the current [Event] by dispatching it to the [Events] instance currently available
@@ -250,6 +312,10 @@ public inline fun <reified T : Event> CoroutineScope.collectEventsAsync(
  */
 public suspend fun Event.emit() {
     coroutineContext.eventsOrThrow.emit(this)
+}
+
+public suspend fun Event.emitAsync() {
+    (coroutineContext.eventsOrThrow as EventsImpl).emitAsync(this)
 }
 
 @UnstableEvasApi

@@ -50,6 +50,7 @@ kotlin {
     sourceSets.jvmMain.dependencies {
         implementation(compose.desktop.currentOs)
         implementation(deps.ktorClientCio)
+        implementation(deps.coroutines.swing)
 
     }
 

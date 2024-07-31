@@ -202,7 +202,7 @@ class StatesTest {
     fun `test - hot state started lazily`() = runTest(States()) {
         var isSubscribed = false
 
-        val stateProducerJob = launchStateProducer(HotState, StandardTestDispatcher(testScheduler), StateProducerStarted.lazily()) {
+        val stateProducerJob = launchStateProducer(HotState, StandardTestDispatcher(testScheduler), StateProducerStarted.Lazily) {
             assertTrue(isSubscribed, "Expected state producer to only be launched after at least one subscription")
             HotState(42).emit()
         }

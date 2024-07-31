@@ -1,10 +1,14 @@
 package io.sellmair.evas
 
+import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.minutes
 
+@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 class EventsStressTest {
 
     data class TestEvent(val coroutineId: Int, val eventId: Int) : Event
@@ -44,6 +48,39 @@ class EventsStressTest {
             }
 
             assertEquals(expected, events)
+        }
+    }
+
+    @Test
+    fun `stress test - emitAsync`() = runTest(Events(), timeout = 10.minutes) {
+        val receivedEvents = mutableListOf<TestEvent>()
+
+        collectEventsAsync<TestEvent>(context = StandardTestDispatcher(testScheduler)) {
+            receivedEvents += it
+        }
+
+        testScheduler.advanceUntilIdle()
+
+        coroutineScope {
+            repeat(1024) { workerIndex ->
+                launch(Dispatchers.Default) {
+                    repeat(1024 * 8) { eventId ->
+                        TestEvent(workerIndex, eventId).emitAsync()
+                    }
+                    println("Worker: $workerIndex done")
+                }
+            }
+        }
+
+
+        launch(Dispatchers.Default) {
+            while (receivedEvents.size != 1024 * 1024 * 8) {
+                println(receivedEvents.size)
+                testScheduler.advanceUntilIdle()
+                println("Rec: ${receivedEvents.size}")
+                yield()
+            }
+            this@runTest.coroutineContext.job.cancelChildren()
         }
     }
 }

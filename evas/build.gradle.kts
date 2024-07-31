@@ -75,5 +75,24 @@ run {
         targets {
             register("jvmBenchmark")
         }
+
+        configurations {
+            register("events") {
+                include(".*\\.events\\..*")
+            }
+
+            register("states") {
+                include(".*\\.states\\..*")
+            }
+        }
+    }
+}
+
+kotlin {
+    jvm {
+        testRuns["test"].executionTask.configure {
+            maxHeapSize = "3G"
+            maxParallelForks = 12
+        }
     }
 }

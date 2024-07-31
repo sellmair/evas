@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package io.sellmair.evas.benchmark
+package io.sellmair.evas.benchmark.states
 
 import io.sellmair.evas.*
 import io.sellmair.evas.State
@@ -61,16 +61,31 @@ open class HotStateProducerBenchmark {
         check(lastReceivedB == states.getState(StateB).value)
     }
 
+    /*
+    4576308.030 ±(99.9%) 145529.768 ops/s [Average]
+    (min, avg, max) = (4431945.239, 4576308.030, 5038085.815), stdev = 167592.298
+    CI (99.9%): [4430778.261, 4721837.798] (assumes normal distribution)
+     */
     @Benchmark
     fun updateStateUsingSetState() = runBlocking(states) {
         states.setState(StateA, StateA(id = random.nextInt()))
     }
 
+    /*
+    533939.420 ±(99.9%) 4023.667 ops/s [Average]
+    (min, avg, max) = (519574.494, 533939.420, 540640.677), stdev = 4633.661
+    CI (99.9%): [529915.753, 537963.087] (assumes normal distribution)
+     */
     @Benchmark
     fun updateStateUsingProducer(): Unit = coroutineScope.launchStateProducer(StateA, Dispatchers.Unconfined) {
         StateA(id = random.nextInt()).emit()
     }.job.asCompletableFuture().join()
 
+    /*
+    198582.539 ±(99.9%) 6930.709 ops/s [Average]
+    (min, avg, max) = (174943.301, 198582.539, 208100.109), stdev = 7981.415
+    CI (99.9%): [191651.830, 205513.248] (assumes normal distribution)
+     */
     @Benchmark
     fun twoStateProducers() = runBlocking(states) {
         coroutineScope {
