@@ -151,12 +151,13 @@ public sealed interface Events : CoroutineContext.Element {
     public companion object Key : CoroutineContext.Key<Events>
 }
 
-private class EventsImpl : Events {
+internal class EventsImpl : Events {
     private val unconfinedScope = CoroutineScope(Dispatchers.Unconfined)
-    private val typedChannels =
+
+    internal val typedChannels =
         AtomicSnapshotMap<KClass<*>, AtomicSnapshot<MutableList<Channel<Dispatch<*>>>, List<Channel<Dispatch<*>>>>>()
 
-    private class Dispatch<out T>(val event: T, val job: CompletableJob?)
+    internal class Dispatch<out T>(val event: T, val job: CompletableJob?)
 
     override fun <T : Event> events(clazz: KClass<T>): Flow<T> {
         val dispatchFlow = flow {
@@ -172,18 +173,20 @@ private class EventsImpl : Events {
                 }
             }
 
-            emitAll(channel)
-
-            /* Cleanup: We can remove the channel from the event bus */
-            typedChannels.write { mutableTypedChannels ->
-                @Suppress("UNCHECKED_CAST")
-                channel as Channel<Dispatch<*>>
-                val channels = mutableTypedChannels[clazz]
-                channels?.write { mutableChannels ->
-                    mutableChannels.remove(channel)
-                    if (mutableChannels.isEmpty()) mutableTypedChannels.remove(clazz)
+            currentCoroutineContext().job.invokeOnCompletion {
+                /* Cleanup: We can remove the channel from the event bus */
+                typedChannels.write { mutableTypedChannels ->
+                    @Suppress("UNCHECKED_CAST")
+                    channel as Channel<Dispatch<*>>
+                    val channels = mutableTypedChannels[clazz]
+                    channels?.write { mutableChannels ->
+                        mutableChannels.remove(channel)
+                        if (mutableChannels.isEmpty()) mutableTypedChannels.remove(clazz)
+                    }
                 }
             }
+
+            emitAll(channel)
         }
 
         return flow {
@@ -199,13 +202,13 @@ private class EventsImpl : Events {
 
     override suspend fun emit(event: Event) {
         coroutineScope {
-            createListenerQueue(event).forEach { listener ->
+            createChannelQueue(event).forEach { channel ->
                 /* Launching coroutine and waiting for the listener to finish (passing non-null job) */
                 launch(context = Dispatchers.Unconfined, start = CoroutineStart.UNDISPATCHED) {
                     val job = Job()
                     val dispatch = Dispatch(event, job)
                     try {
-                        listener.send(dispatch)
+                        channel.send(dispatch)
                         job.join()
                     } catch (e: ClosedSendChannelException) {
                         return@launch
@@ -216,7 +219,7 @@ private class EventsImpl : Events {
     }
 
     override fun emitAsync(event: Event) {
-        val queue = createListenerQueue(event)
+        val queue = createChannelQueue(event)
         queue.forEach { listener ->
             val dispatch = Dispatch(event, null)
             val sendResult = listener.trySend(dispatch)
@@ -229,7 +232,7 @@ private class EventsImpl : Events {
         }
     }
 
-    private fun createListenerQueue(event: Event): List<SendChannel<Dispatch<Event>>> {
+    private fun createChannelQueue(event: Event): List<SendChannel<Dispatch<Event>>> {
         val listenerQueue = mutableListOf<SendChannel<Dispatch<Event>>>()
         typedChannels.snapshot().forEach { (clazz, listeners) ->
             if (clazz.isInstance(event)) {

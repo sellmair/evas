@@ -214,4 +214,29 @@ class EventsTest {
         testScheduler.advanceUntilIdle()
         assertSame(exception.message, exceptions.single().message)
     }
+
+    @Test
+    fun `test - listener gets cleaned in Events`() = runTest(Events()) {
+        val events = currentCoroutineContext().eventsOrThrow as EventsImpl
+        val collector = collectEventsAsync<TestEventA> {}
+        assertEquals(setOf(TestEventA::class), events.typedChannels.snapshot().keys)
+
+        collector.cancelAndJoin()
+        assertEquals(emptySet<Any>(), events.typedChannels.snapshot().keys)
+    }
+
+    @Test
+    fun `test - listener gets cleaned in Events - multiple collectors`() = runTest(Events()) {
+        val events = currentCoroutineContext().eventsOrThrow as EventsImpl
+        val collector1 = collectEventsAsync<TestEventA> {}
+        val collector2 = collectEventsAsync<TestEventA> {}
+        assertEquals(setOf(TestEventA::class), events.typedChannels.snapshot().keys)
+        assertEquals(2, events.typedChannels.snapshot()[TestEventA::class]?.snapshot()?.size)
+
+        collector1.cancelAndJoin()
+        assertEquals(1, events.typedChannels.snapshot()[TestEventA::class]?.snapshot()?.size)
+
+        collector2.cancelAndJoin()
+        assertEquals(emptySet<Any>(), events.typedChannels.snapshot().keys)
+    }
 }
