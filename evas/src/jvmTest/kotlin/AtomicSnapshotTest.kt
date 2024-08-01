@@ -27,5 +27,7 @@ class AtomicSnapshotTest {
     fun stressTest() = StressOptions().check(this::class)
 
     @Test
-    fun modelCheckingTest() = ModelCheckingOptions().check(this::class)
+    fun modelCheckingTest() = ModelCheckingOptions()
+        .hangingDetectionThreshold(12)
+        .check(this::class)
 }
