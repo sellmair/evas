@@ -34,6 +34,7 @@ include(":evas")
 include(":evas-compose")
 include(":samples:joke-app")
 include(":samples:login-screen")
+include(":samples:directory-statistics-cli")
 
 
 gradle.lifecycle.beforeProject {

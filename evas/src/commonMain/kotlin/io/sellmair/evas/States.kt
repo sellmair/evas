@@ -149,6 +149,10 @@ public suspend fun <T : State?> Key<T>.get(): StateFlow<T> {
     return coroutineContext.statesOrThrow.getState(this)
 }
 
+public suspend fun <T : State?> Key<T>.getValue(): T {
+    return get().value
+}
+
 /**
  * Shortcut for `get().collect(collector)`
  * See [get]
@@ -211,7 +215,7 @@ internal class StatesImpl : States {
         return getOrCreateMutableStateFlow(key).asStateFlow()
     }
 
-    internal fun <T: State?> getMutableState(key: Key<T>): MutableStateFlow<T> {
+    internal fun <T : State?> getMutableState(key: Key<T>): MutableStateFlow<T> {
         return getOrCreateMutableStateFlow(key)
     }
 

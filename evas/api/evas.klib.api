@@ -1,5 +1,5 @@
 // Klib ABI Dump
-// Targets: [androidNativeArm64, androidNativeX64, androidNativeX86, iosArm64, iosSimulatorArm64, iosX64, js, linuxX64, macosArm64, macosX64, mingwX64, tvosArm64, tvosSimulatorArm64, tvosX64, wasmJs, wasmWasi, watchosArm32, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64, watchosX64]
+// Targets: [androidNativeArm64, androidNativeX64, androidNativeX86, iosArm64, iosSimulatorArm64, iosX64, js, linuxArm64, linuxX64, macosArm64, macosX64, mingwX64, tvosArm64, tvosSimulatorArm64, tvosX64, wasmJs, wasmWasi, watchosArm32, watchosArm64, watchosDeviceArm64, watchosSimulatorArm64, watchosX64]
 // Rendering settings:
 // - Signature version: 2
 // - Show manifest properties: true
@@ -108,6 +108,7 @@ final suspend fun (io.sellmair.evas/Event).io.sellmair.evas/emit() // io.sellmai
 final suspend fun (io.sellmair.evas/Event).io.sellmair.evas/emitAsync() // io.sellmair.evas/emitAsync|emitAsync@io.sellmair.evas.Event(){}[0]
 final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/collect(kotlinx.coroutines.flow/FlowCollector<#A>) // io.sellmair.evas/collect|collect@io.sellmair.evas.State.Key<0:0>(kotlinx.coroutines.flow.FlowCollector<0:0>){0§<io.sellmair.evas.State?>}[0]
 final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/get(): kotlinx.coroutines.flow/StateFlow<#A> // io.sellmair.evas/get|get@io.sellmair.evas.State.Key<0:0>(){0§<io.sellmair.evas.State?>}[0]
+final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/getValue(): #A // io.sellmair.evas/getValue|getValue@io.sellmair.evas.State.Key<0:0>(){0§<io.sellmair.evas.State?>}[0]
 final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/set(#A) // io.sellmair.evas/set|set@io.sellmair.evas.State.Key<0:0>(0:0){0§<io.sellmair.evas.State?>}[0]
 final suspend inline fun <#A: reified io.sellmair.evas/Event> io.sellmair.evas/collectEvents(noinline kotlin.coroutines/SuspendFunction1<#A, kotlin/Unit>) // io.sellmair.evas/collectEvents|collectEvents(kotlin.coroutines.SuspendFunction1<0:0,kotlin.Unit>){0§<io.sellmair.evas.Event>}[0]
 final suspend inline fun <#A: reified io.sellmair.evas/Event> io.sellmair.evas/events(): kotlinx.coroutines.flow/Flow<#A> // io.sellmair.evas/events|events(){0§<io.sellmair.evas.Event>}[0]

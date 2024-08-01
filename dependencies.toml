@@ -17,3 +17,4 @@ ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktorClientDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 lincheck = "org.jetbrains.kotlinx:lincheck:2.32"
+okio = "com.squareup.okio:okio:3.9.0"

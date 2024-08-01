@@ -16,7 +16,7 @@ kotlin {
     androidTarget()
 
     linuxX64()
-    linuxX64()
+    linuxArm64()
 
     macosArm64()
     macosX64()

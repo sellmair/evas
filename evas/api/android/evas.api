@@ -123,6 +123,7 @@ public final class io/sellmair/evas/StatesKt {
 	public static final fun get (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun getStatesOrNull (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
 	public static final fun getStatesOrThrow (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
+	public static final fun getValue (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun set (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
