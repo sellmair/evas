@@ -134,7 +134,7 @@ class EventsTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun `test - event emission waits for all subscribers to finish`() = runTest(Events()) {
         val receivedSubscriber1 = mutableListOf<TestEventA>()
-        val receviedSubscriber2 = mutableListOf<TestEventA>()
+        val receivedSubscriber2 = mutableListOf<TestEventA>()
 
         collectEventsAsync<TestEventA>(context = UnconfinedTestDispatcher(testScheduler)) {
             receivedSubscriber1 += it
@@ -142,17 +142,17 @@ class EventsTest {
         }
 
         collectEventsAsync<TestEventA>(context = UnconfinedTestDispatcher(testScheduler)) {
-            receviedSubscriber2 += it
+            receivedSubscriber2 += it
             delay(10)
         }
 
         TestEventA(1).emit()
         assertEquals(listOf(TestEventA(1)), receivedSubscriber1)
-        assertEquals(listOf(TestEventA(1)), receviedSubscriber2)
+        assertEquals(listOf(TestEventA(1)), receivedSubscriber2)
 
         TestEventA(2).emit()
         assertEquals(listOf(TestEventA(1), TestEventA(2)), receivedSubscriber1)
-        assertEquals(listOf(TestEventA(1), TestEventA(2)), receviedSubscriber2)
+        assertEquals(listOf(TestEventA(1), TestEventA(2)), receivedSubscriber2)
 
         currentCoroutineContext().job.cancelChildren()
     }

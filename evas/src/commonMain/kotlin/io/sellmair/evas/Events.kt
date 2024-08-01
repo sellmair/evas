@@ -3,11 +3,10 @@ package io.sellmair.evas
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.internal.ChannelFlow
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.coroutineContext
@@ -156,45 +155,36 @@ public sealed interface Events : CoroutineContext.Element {
     public companion object Key : CoroutineContext.Key<Events>
 }
 
-private typealias Listener<T> = suspend (T) -> Unit
-
 private class EventsImpl : Events {
     private val unconfinedScope = CoroutineScope(Dispatchers.Unconfined)
     private val lock = reentrantLock()
-    private val typedListeners = mutableMapOf<KClass<*>, MutableCollection<Listener<Dispatch<*>>>>()
-    private val listeners = LinkedHashSet<Listener<Dispatch<*>>>()
+    private val typedListeners = mutableMapOf<KClass<*>, MutableCollection<Channel<Dispatch<*>>>>()
 
     private class Dispatch<out T>(val event: T, val job: CompletableJob?)
 
     override fun <T : Event> events(clazz: KClass<T>): Flow<T> {
-        val channelFlow = channelFlow {
-            val listener: Listener<Dispatch<T>> = listener@{ dispatch ->
-                if (!isActive) return@listener
-                send(dispatch)
-                dispatch.job?.join()
-            }
-
-            @Suppress("UNCHECKED_CAST")
-            listener as Listener<Dispatch<*>>
+        val dispatchFlow = flow<Dispatch<T>> {
+            val channel = Channel<Dispatch<T>>(Channel.UNLIMITED)
             lock.withLock {
-                typedListeners.getOrPut(clazz) { ArrayList() }.add(listener)
-                listeners.add(listener)
+                @Suppress("UNCHECKED_CAST")
+                typedListeners.getOrPut(clazz) { ArrayList() }.add(channel as Channel<Dispatch<*>>)
             }
 
-            awaitClose {
-                lock.withLock {
-                    typedListeners[clazz]?.let { set ->
-                        set.remove(listener)
-                        if (set.isEmpty()) typedListeners.remove(clazz)
-                    }
+            emitAll(channel)
 
-                    listeners.remove(listener)
+            /* Cleanup */
+            lock.withLock {
+                @Suppress("UNCHECKED_CAST")
+                channel as Channel<Dispatch<*>>
+                typedListeners[clazz]?.let { channels ->
+                    channels.remove(channel)
+                    if (channels.isEmpty()) typedListeners.remove(clazz)
                 }
             }
         }
 
         return flow {
-            channelFlow.collect { dispatch ->
+            dispatchFlow.collect { dispatch ->
                 try {
                     emit(dispatch.event)
                 } finally {
@@ -208,7 +198,16 @@ private class EventsImpl : Events {
         coroutineScope {
             createListenerQueue(event).forEach { listener ->
                 /* Launching coroutine and waiting for the listener to finish (passing non-null job) */
-                launch { listener(Dispatch(event, Job())) }
+                launch(context = Dispatchers.Unconfined, start = CoroutineStart.UNDISPATCHED) {
+                    val job = Job()
+                    val dispatch = Dispatch(event, job)
+                    try {
+                        listener.send(dispatch)
+                        job.join()
+                    } catch (e: ClosedSendChannelException) {
+                        return@launch
+                    }
+                }
             }
         }
     }
@@ -216,14 +215,19 @@ private class EventsImpl : Events {
     override fun emitAsync(event: Event) {
         val queue = createListenerQueue(event)
         queue.forEach { listener ->
-            unconfinedScope.launch {
-                listener(Dispatch(event, null))
+            val dispatch = Dispatch(event, null)
+            val sendResult = listener.trySend(dispatch)
+            if (sendResult.isClosed) return@forEach
+            if (sendResult.isFailure) {
+                unconfinedScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    listener.send(dispatch)
+                }
             }
         }
     }
 
-    private fun createListenerQueue(event: Event): List<Listener<Dispatch<Event>>> {
-        val listenerQueue = mutableListOf<Listener<Dispatch<Event>>>()
+    private fun createListenerQueue(event: Event): List<SendChannel<Dispatch<Event>>> {
+        val listenerQueue = mutableListOf<SendChannel<Dispatch<Event>>>()
         lock.withLock {
             typedListeners.forEach { (clazz, listeners) ->
                 if (clazz.isInstance(event)) {

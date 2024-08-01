@@ -37,14 +37,14 @@ open class EmitBenchmark {
 
     /**
      * 100:
-     * 22041.954 ±(99.9%) 65.424 ops/s [Average]
-     *   (min, avg, max) = (21899.308, 22041.954, 22188.540), stdev = 75.342
-     *   CI (99.9%): [21976.530, 22107.377] (assumes normal distribution)
+     * 34884.971 ±(99.9%) 94.687 ops/s [Average]
+     *   (min, avg, max) = (34636.933, 34884.971, 35054.948), stdev = 109.042
+     *   CI (99.9%): [34790.283, 34979.658] (assumes normal distribution)
      *
      * 1000:
-     * 2270.030 ±(99.9%) 8.740 ops/s [Average]
-     *   (min, avg, max) = (2250.310, 2270.030, 2293.347), stdev = 10.065
-     *   CI (99.9%): [2261.290, 2278.770] (assumes normal distribution)
+     * 3707.745 ±(99.9%) 8.332 ops/s [Average]
+     *   (min, avg, max) = (3692.066, 3707.745, 3727.593), stdev = 9.595
+     *   CI (99.9%): [3699.414, 3716.077] (assumes normal distribution)
      */
     @Benchmark
     fun emitEvents() = runBlocking(events) {
@@ -55,14 +55,14 @@ open class EmitBenchmark {
 
     /**
      * 100:
-     * 50801.984 ±(99.9%) 117.427 ops/s [Average]
-     *   (min, avg, max) = (50399.497, 50801.984, 50986.841), stdev = 135.230
-     *   CI (99.9%): [50684.557, 50919.412] (assumes normal distribution)
+     * 22041.954 ±(99.9%) 65.424 ops/s [Average]
+     *   (min, avg, max) = (21899.308, 22041.954, 22188.540), stdev = 75.342
+     *   CI (99.9%): [21976.530, 22107.377] (assumes normal distribution)
      *
      * 1000:
-     * 5249.367 ±(99.9%) 7.928 ops/s [Average]
-     *   (min, avg, max) = (5228.592, 5249.367, 5262.035), stdev = 9.130
-     *   CI (99.9%): [5241.439, 5257.295] (assumes normal distribution)
+     * 2270.030 ±(99.9%) 8.740 ops/s [Average]
+     *   (min, avg, max) = (2250.310, 2270.030, 2293.347), stdev = 10.065
+     *   CI (99.9%): [2261.290, 2278.770] (assumes normal distribution)
      */
     @Benchmark
     fun emitAsyncEvents(blackhole: Blackhole) {

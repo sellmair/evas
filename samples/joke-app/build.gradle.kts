@@ -12,6 +12,8 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(21)
+
     /* Supported Targets */
     jvm()
     androidTarget()

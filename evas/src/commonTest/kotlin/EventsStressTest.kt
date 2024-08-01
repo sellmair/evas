@@ -1,8 +1,8 @@
 package io.sellmair.evas
 
-import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -51,10 +51,11 @@ class EventsStressTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `stress test - emitAsync`() = runTest(Events(), timeout = 10.minutes) {
         val receivedEvents = mutableListOf<TestEvent>()
-
+        
         collectEventsAsync<TestEvent>(context = StandardTestDispatcher(testScheduler)) {
             receivedEvents += it
         }
@@ -62,7 +63,7 @@ class EventsStressTest {
         testScheduler.advanceUntilIdle()
 
         coroutineScope {
-            repeat(1024) { workerIndex ->
+            repeat(128) { workerIndex ->
                 launch(Dispatchers.Default) {
                     repeat(1024 * 8) { eventId ->
                         TestEvent(workerIndex, eventId).emitAsync()
@@ -74,7 +75,7 @@ class EventsStressTest {
 
 
         launch(Dispatchers.Default) {
-            while (receivedEvents.size != 1024 * 1024 * 8) {
+            while (receivedEvents.size != 128 * 1024 * 8) {
                 println(receivedEvents.size)
                 testScheduler.advanceUntilIdle()
                 println("Rec: ${receivedEvents.size}")

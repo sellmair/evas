@@ -71,8 +71,6 @@ open class io.sellmair.evas/EvasException : kotlin/Exception { // io.sellmair.ev
 }
 
 sealed class io.sellmair.evas/StateProducerStarted { // io.sellmair.evas/StateProducerStarted|null[0]
-    constructor <init>() // io.sellmair.evas/StateProducerStarted.<init>|<init>(){}[0]
-
     final object Companion { // io.sellmair.evas/StateProducerStarted.Companion|null[0]
         final val Eagerly // io.sellmair.evas/StateProducerStarted.Companion.Eagerly|{}Eagerly[0]
             final fun <get-Eagerly>(): io.sellmair.evas/StateProducerStarted // io.sellmair.evas/StateProducerStarted.Companion.Eagerly.<get-Eagerly>|<get-Eagerly>(){}[0]
