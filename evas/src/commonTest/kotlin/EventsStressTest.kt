@@ -55,8 +55,8 @@ class EventsStressTest {
     @Test
     fun `stress test - emitAsync`() = runTest(Events(), timeout = 10.minutes) {
         val receivedEvents = mutableListOf<TestEvent>()
-        
-        collectEventsAsync<TestEvent>(context = StandardTestDispatcher(testScheduler)) {
+
+        collectEventsAsync<TestEvent>(context = UnconfinedTestDispatcher(testScheduler)) {
             receivedEvents += it
         }
 
@@ -72,7 +72,6 @@ class EventsStressTest {
                 }
             }
         }
-
 
         launch(Dispatchers.Default) {
             while (receivedEvents.size != 128 * 1024 * 8) {

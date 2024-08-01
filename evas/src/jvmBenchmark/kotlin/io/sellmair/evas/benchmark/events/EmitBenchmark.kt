@@ -55,14 +55,17 @@ open class EmitBenchmark {
 
     /**
      * 100:
-     * 22041.954 ±(99.9%) 65.424 ops/s [Average]
-     *   (min, avg, max) = (21899.308, 22041.954, 22188.540), stdev = 75.342
-     *   CI (99.9%): [21976.530, 22107.377] (assumes normal distribution)
+     * 110180.067 ±(99.9%) 466.968 ops/s [Average]
+     *   (min, avg, max) = (109035.328, 110180.067, 111090.603), stdev = 537.761
+     *   CI (99.9%): [109713.099, 110647.035] (assumes normal distribution)
+     *
+     *
+     *
      *
      * 1000:
-     * 2270.030 ±(99.9%) 8.740 ops/s [Average]
-     *   (min, avg, max) = (2250.310, 2270.030, 2293.347), stdev = 10.065
-     *   CI (99.9%): [2261.290, 2278.770] (assumes normal distribution)
+     * 10741.565 ±(99.9%) 35.814 ops/s [Average]
+     *   (min, avg, max) = (10667.509, 10741.565, 10807.823), stdev = 41.244
+     *   CI (99.9%): [10705.751, 10777.379] (assumes normal distribution)
      */
     @Benchmark
     fun emitAsyncEvents(blackhole: Blackhole) {

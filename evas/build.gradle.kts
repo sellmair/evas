@@ -58,6 +58,10 @@ kotlin {
         implementation(kotlin("test"))
         implementation(deps.coroutines.test)
     }
+
+    sourceSets.jvmTest.dependencies {
+        implementation(deps.lincheck)
+    }
 }
 
 

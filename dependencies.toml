@@ -15,3 +15,5 @@ kotlinxBenchmarkRuntime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-ru
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktorClientDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
+lincheck = "org.jetbrains.kotlinx:lincheck:2.32"

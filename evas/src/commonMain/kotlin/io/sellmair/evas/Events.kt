@@ -1,12 +1,8 @@
 package io.sellmair.evas
 
-import kotlinx.atomicfu.locks.reentrantLock
-import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.internal.ChannelFlow
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.coroutineContext
@@ -157,28 +153,35 @@ public sealed interface Events : CoroutineContext.Element {
 
 private class EventsImpl : Events {
     private val unconfinedScope = CoroutineScope(Dispatchers.Unconfined)
-    private val lock = reentrantLock()
-    private val typedListeners = mutableMapOf<KClass<*>, MutableCollection<Channel<Dispatch<*>>>>()
+    private val typedChannels =
+        AtomicSnapshotMap<KClass<*>, AtomicSnapshot<MutableList<Channel<Dispatch<*>>>, List<Channel<Dispatch<*>>>>>()
 
     private class Dispatch<out T>(val event: T, val job: CompletableJob?)
 
     override fun <T : Event> events(clazz: KClass<T>): Flow<T> {
-        val dispatchFlow = flow<Dispatch<T>> {
+        val dispatchFlow = flow {
             val channel = Channel<Dispatch<T>>(Channel.UNLIMITED)
-            lock.withLock {
-                @Suppress("UNCHECKED_CAST")
-                typedListeners.getOrPut(clazz) { ArrayList() }.add(channel as Channel<Dispatch<*>>)
+
+            /* Register Channel in this even bus */
+            typedChannels.write { mutableTypedChannels ->
+                val channels = mutableTypedChannels.getOrPut(clazz) { AtomicSnapshotList() }
+
+                channels.write { mutableChannels ->
+                    @Suppress("UNCHECKED_CAST")
+                    mutableChannels.add(channel as Channel<Dispatch<*>>)
+                }
             }
 
             emitAll(channel)
 
-            /* Cleanup */
-            lock.withLock {
+            /* Cleanup: We can remove the channel from the event bus */
+            typedChannels.write { mutableTypedChannels ->
                 @Suppress("UNCHECKED_CAST")
                 channel as Channel<Dispatch<*>>
-                typedListeners[clazz]?.let { channels ->
-                    channels.remove(channel)
-                    if (channels.isEmpty()) typedListeners.remove(clazz)
+                val channels = mutableTypedChannels[clazz]
+                channels?.write { mutableChannels ->
+                    mutableChannels.remove(channel)
+                    if (mutableChannels.isEmpty()) mutableTypedChannels.remove(clazz)
                 }
             }
         }
@@ -228,13 +231,12 @@ private class EventsImpl : Events {
 
     private fun createListenerQueue(event: Event): List<SendChannel<Dispatch<Event>>> {
         val listenerQueue = mutableListOf<SendChannel<Dispatch<Event>>>()
-        lock.withLock {
-            typedListeners.forEach { (clazz, listeners) ->
-                if (clazz.isInstance(event)) {
-                    listenerQueue.addAll(listeners)
-                }
+        typedChannels.snapshot().forEach { (clazz, listeners) ->
+            if (clazz.isInstance(event)) {
+                listenerQueue.addAll(listeners.snapshot())
             }
         }
+
         return listenerQueue
     }
 }
