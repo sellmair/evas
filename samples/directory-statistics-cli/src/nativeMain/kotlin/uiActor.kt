@@ -1,4 +1,4 @@
-import io.sellmair.evas.getValue
+import io.sellmair.evas.value
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -20,8 +20,8 @@ fun CoroutineScope.launchUiActor() = launch(Dispatchers.Default) {
 private suspend fun printUI() {
     print("\u001b[H\u001b[2J")
 
-    val initialPaths = InitialPathsState.getValue()
-    val statistics = SummaryState.getValue()
+    val initialPaths = InitialPathsState.value()
+    val statistics = SummaryState.value()
 
     if (initialPaths != null) {
         initialPaths.initialPaths.forEach { path ->
@@ -38,7 +38,7 @@ private suspend fun printUI() {
     println("#################################################")
 
     repeat(discoveryWorkers) { workerIndex ->
-        val state = DiscoveryActorState.Key(workerIndex).getValue()
+        val state = DiscoveryActorState.Key(workerIndex).value()
         println("# Discovery Worker: $workerIndex - ${state?.path?.toString()?.shorten() ?: "Idle"}")
     }
     println("#################################################")

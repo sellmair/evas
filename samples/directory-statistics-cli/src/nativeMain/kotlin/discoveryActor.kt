@@ -26,7 +26,6 @@ fun CoroutineScope.launchDiscoveryActors() = launch {
             governor = launchDiscoveryGovernor(queue)
         }
     }
-
 }
 
 private fun CoroutineScope.launchDiscoveryGovernor(queue: Channel<Path>) = launch {

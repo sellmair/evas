@@ -11,27 +11,27 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
-public fun <T : State?> State.Key<T>.get(): StateFlow<T> {
+public fun <T : State?> State.Key<T>.composeFlow(): StateFlow<T> {
     return statesOrThrow().getState(this)
 }
 
 @Composable
-public fun <T : State?> State.Key<T>.set(value: T) {
+public fun <T : State?> State.Key<T>.composeSet(value: T) {
     statesOrThrow().setState(this, value)
 }
 
 @Composable
-public fun <T : State?> State.Key<T>.collectAsState(): androidx.compose.runtime.State<T> {
-    return get().collectAsState(Dispatchers.Main.immediate)
+public fun <T : State?> State.Key<T>.composeState(): androidx.compose.runtime.State<T> {
+    return composeFlow().collectAsState(Dispatchers.Main.immediate)
 }
 
 @Composable
-public fun <T : State?> State.Key<T>.collectAsValue(): T {
-    return get().collectAsState().value
+public fun <T : State?> State.Key<T>.composeValue(): T {
+    return composeFlow().collectAsState().value
 }
 
 @Composable
-public inline fun LaunchingEvents(
+public inline fun EvasLaunching(
     context: CoroutineContext = EmptyCoroutineContext, crossinline effect: suspend () -> Unit
 ): () -> Unit {
     val scope = rememberEvasCoroutineScope { context }
@@ -41,7 +41,7 @@ public inline fun LaunchingEvents(
 }
 
 @Composable
-public fun <T> LaunchingEvents(
+public fun <T> EvasLaunching(
     context: CoroutineContext = EmptyCoroutineContext,
     effect: suspend (value: T) -> Unit
 ): (T) -> Unit {

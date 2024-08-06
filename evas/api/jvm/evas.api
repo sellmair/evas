@@ -86,6 +86,7 @@ public abstract interface class io/sellmair/evas/State$Key {
 public final class io/sellmair/evas/StateProducerScope : kotlinx/coroutines/CoroutineScope {
 	public final fun emit (Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun emitAll (Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun emitState (Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getCoroutineContext ()Lkotlin/coroutines/CoroutineContext;
 }
 
@@ -120,11 +121,11 @@ public final class io/sellmair/evas/States$Key : kotlin/coroutines/CoroutineCont
 public final class io/sellmair/evas/StatesKt {
 	public static final fun States ()Lio/sellmair/evas/States;
 	public static final fun collect (Lio/sellmair/evas/State$Key;Lkotlinx/coroutines/flow/FlowCollector;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun get (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun flow (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun getStatesOrNull (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
 	public static final fun getStatesOrThrow (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
-	public static final fun getValue (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun set (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun value (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface annotation class io/sellmair/evas/UnstableEvasApi : java/lang/annotation/Annotation {

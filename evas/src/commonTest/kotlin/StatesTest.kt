@@ -6,7 +6,6 @@ package io.sellmair.evas
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
@@ -36,7 +35,7 @@ class StatesTest {
         }
 
         launch {
-            ColdState.Key("Hello").get()
+            ColdState.Key("Hello").flow()
                 .onEach { value -> collectedStates.add(value) }
                 .collect { value ->
                     if (value != null) {
@@ -62,17 +61,17 @@ class StatesTest {
         }
 
         launch {
-            ColdState.Key().get().collect { value ->
+            ColdState.Key().flow().collect { value ->
                 if (value != null) cancel()
             }
         }.join()
 
 
-        assertNotNull(ColdState.Key().get().value)
+        assertNotNull(ColdState.Key().flow().value)
 
         while (isActive) {
             yield()
-            if (ColdState.Key().get().value == null) {
+            if (ColdState.Key().flow().value == null) {
                 coroutineContext.job.cancelChildren()
                 break
             }
@@ -86,7 +85,7 @@ class StatesTest {
         }
 
         testScheduler.advanceUntilIdle()
-        assertEquals(HotState("Hello"), HotState.get().value)
+        assertEquals(HotState("Hello"), HotState.flow().value)
         coroutineContext.job.cancelChildren()
     }
 
@@ -101,8 +100,8 @@ class StatesTest {
 
         testScheduler.advanceUntilIdle()
         assertTrue(isLaunched)
-        HotState.get().take(1).collect()
-        HotState.get().take(1).collect()
+        HotState.flow().take(1).collect()
+        HotState.flow().take(1).collect()
         coroutineContext.job.cancelChildren()
     }
 
@@ -117,24 +116,24 @@ class StatesTest {
         }
 
         launch {
-            ColdState.Key().get().takeWhile { it == null }.collect()
+            ColdState.Key().flow().takeWhile { it == null }.collect()
         }.join()
 
         testScheduler.advanceTimeBy(1)
 
-        assertEquals(ColdState(0L), ColdState.Key().get().value)
+        assertEquals(ColdState(0L), ColdState.Key().flow().value)
 
         testScheduler.advanceTimeBy(1.seconds)
-        assertEquals(ColdState(1000L), ColdState.Key().get().value)
+        assertEquals(ColdState(1000L), ColdState.Key().flow().value)
 
         testScheduler.advanceTimeBy(1.seconds)
-        assertEquals(ColdState(2000L), ColdState.Key().get().value)
+        assertEquals(ColdState(2000L), ColdState.Key().flow().value)
 
         testScheduler.advanceTimeBy(1.seconds)
-        assertEquals(ColdState(3000L), ColdState.Key().get().value)
+        assertEquals(ColdState(3000L), ColdState.Key().flow().value)
 
         testScheduler.advanceTimeBy(1.seconds)
-        assertEquals(null, ColdState.Key().get().value)
+        assertEquals(null, ColdState.Key().flow().value)
 
         coroutineContext.job.cancelChildren()
     }
@@ -153,26 +152,26 @@ class StatesTest {
         }
 
         launch {
-            ColdState.Key().get().takeWhile { it == null }.collect()
+            ColdState.Key().flow().takeWhile { it == null }.collect()
         }.join()
 
         testScheduler.advanceTimeBy(1)
-        assertEquals(ColdState(0L), ColdState.Key().get().value)
+        assertEquals(ColdState(0L), ColdState.Key().flow().value)
 
         testScheduler.advanceTimeBy(1.seconds)
-        assertEquals(ColdState(1000L), ColdState.Key().get().value)
+        assertEquals(ColdState(1000L), ColdState.Key().flow().value)
 
         // Launch coroutine that will receive current state and will wait for one more state
         // Giving us three more emissions
         launch {
-            ColdState.Key().get().take(2).collect()
+            ColdState.Key().flow().take(2).collect()
         }
 
         testScheduler.advanceTimeBy(3.seconds)
-        assertEquals(ColdState(4000L), ColdState.Key().get().value)
+        assertEquals(ColdState(4000L), ColdState.Key().flow().value)
 
         testScheduler.advanceTimeBy(3.seconds)
-        assertEquals(null, ColdState.Key().get().value)
+        assertEquals(null, ColdState.Key().flow().value)
 
         coroutineContext.job.cancelChildren()
     }
@@ -184,7 +183,7 @@ class StatesTest {
         }
 
         // Wait for the state
-        HotState.get().first { it == HotState(42) }
+        HotState.flow().first { it == HotState(42) }
         assertTrue(stateProducerJob.isCompleted, "Expected job to be completed")
     }
 
@@ -195,7 +194,7 @@ class StatesTest {
         }
 
         testScheduler.advanceUntilIdle()
-        assertEquals(HotState(42), HotState.get().value)
+        assertEquals(HotState(42), HotState.flow().value)
     }
 
     @Test
@@ -208,13 +207,13 @@ class StatesTest {
         }
         testScheduler.advanceUntilIdle()
         assertEquals(
-            null, HotState.get().value,
+            null, HotState.flow().value,
             "We do not expect any value being emitted, as the state producer was not yet launched"
         )
 
         // Start subscribing to the state
         isSubscribed = true
-        assertEquals(HotState(42), HotState.get().filterNotNull().first())
+        assertEquals(HotState(42), HotState.flow().filterNotNull().first())
         assertTrue(stateProducerJob.isCompleted, "Expected job to be completed")
     }
 }

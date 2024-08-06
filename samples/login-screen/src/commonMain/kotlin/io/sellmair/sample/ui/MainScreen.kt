@@ -11,15 +11,15 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.sellmair.evas.compose.LaunchingEvents
-import io.sellmair.evas.compose.collectAsValue
+import io.sellmair.evas.compose.EvasLaunching
+import io.sellmair.evas.compose.composeValue
 import io.sellmair.evas.emit
 import io.sellmair.sample.UserState
 import io.sellmair.sample.loginScreen.UserLogoutEvent
 
 @Composable
 fun MainScreen() {
-    val userState = UserState.collectAsValue() as? UserState.LoggedIn ?: return
+    val userState = UserState.composeValue() as? UserState.LoggedIn ?: return
     Column (
         modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,7 +43,7 @@ fun MainScreen() {
         Button(
             modifier = Modifier.fillMaxWidth()
                 .padding(32.dp),
-            onClick = LaunchingEvents {
+            onClick = EvasLaunching {
                 UserLogoutEvent.emit()
             }
         ) {

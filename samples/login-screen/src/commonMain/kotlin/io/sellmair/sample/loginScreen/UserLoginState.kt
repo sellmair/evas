@@ -24,7 +24,7 @@ fun CoroutineScope.launchUserLoginStateActor() = launchStateProducer(UserLoginSt
     UserLoginState.NotLoggedIn().emit()
 
     collectEvents<LoginClickedEvent> {
-        val emailState = EmailState.get().value
+        val emailState = EmailState.flow().value
         val password = passwordStateFlow.value
 
         if (!emailState.isValid) return@collectEvents

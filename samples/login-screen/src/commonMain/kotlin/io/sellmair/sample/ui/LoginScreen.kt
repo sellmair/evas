@@ -23,8 +23,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import io.sellmair.evas.compose.LaunchingEvents
-import io.sellmair.evas.compose.collectAsValue
+import io.sellmair.evas.compose.EvasLaunching
+import io.sellmair.evas.compose.composeValue
 import io.sellmair.evas.compose.rememberEvasCoroutineScope
 import io.sellmair.evas.emit
 import io.sellmair.sample.loginScreen.*
@@ -67,7 +67,7 @@ fun EmailPasswordCard() {
 private fun EmailTextField() {
     val focusManager = LocalFocusManager.current
 
-    val emailState = EmailState.collectAsValue()
+    val emailState = EmailState.composeValue()
     TextField(
         modifier = Modifier.fillMaxWidth()
             .testTag(LoginScreen.EmailTextField.name),
@@ -81,7 +81,7 @@ private fun EmailTextField() {
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         ),
         singleLine = true,
-        onValueChange = LaunchingEvents { value ->
+        onValueChange = EvasLaunching { value ->
             EmailChangedEvent(value).emit()
         },
     )
@@ -90,7 +90,7 @@ private fun EmailTextField() {
 @Composable
 private fun PasswordTextField() {
     val focusManager = LocalFocusManager.current
-    val passwordState = PasswordState.collectAsValue()
+    val passwordState = PasswordState.composeValue()
     var passwordVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberEvasCoroutineScope()
     TextField(
@@ -117,7 +117,7 @@ private fun PasswordTextField() {
                 )
             }
         },
-        onValueChange = LaunchingEvents { value ->
+        onValueChange = EvasLaunching { value ->
             PasswordChangedEvent(value).emit()
         }
     )
@@ -125,15 +125,15 @@ private fun PasswordTextField() {
 
 @Composable
 private fun LoginButton(modifier: Modifier = Modifier) {
-    val emailState = EmailState.collectAsValue()
-    val passwordState = PasswordState.collectAsValue()
-    val userLoginState = UserLoginState.collectAsValue()
+    val emailState = EmailState.composeValue()
+    val passwordState = PasswordState.composeValue()
+    val userLoginState = UserLoginState.composeValue()
 
     Button(
         modifier = modifier.fillMaxWidth()
             .padding(horizontal = 16.dp)
             .testTag(LoginScreen.LoginButton.name),
-        onClick = LaunchingEvents { LoginClickedEvent.emit() },
+        onClick = EvasLaunching { LoginClickedEvent.emit() },
         enabled = emailState.isValid &&
                 passwordState.password.isNotEmpty() &&
                 userLoginState is UserLoginState.NotLoggedIn
@@ -144,7 +144,7 @@ private fun LoginButton(modifier: Modifier = Modifier) {
 
 @Composable
 private fun LoginErrorText(modifier: Modifier = Modifier) {
-    val notLoggedIn = UserLoginState.collectAsValue() as? UserLoginState.NotLoggedIn ?: return
+    val notLoggedIn = UserLoginState.composeValue() as? UserLoginState.NotLoggedIn ?: return
     val error = notLoggedIn.error ?: return
     if (error.isEmpty()) return
 

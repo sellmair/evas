@@ -145,21 +145,21 @@ public val CoroutineContext.statesOrNull: States?
  * @return the state associated with the given [Key] as [StateFlow].
  * @throws [MissingStatesException] if there is no [States] instance installed in the current coroutine context.
  */
-public suspend fun <T : State?> Key<T>.get(): StateFlow<T> {
+public suspend fun <T : State?> Key<T>.flow(): StateFlow<T> {
     return coroutineContext.statesOrThrow.getState(this)
 }
 
-public suspend fun <T : State?> Key<T>.getValue(): T {
-    return get().value
+public suspend fun <T : State?> Key<T>.value(): T {
+    return flow().value
 }
 
 /**
  * Shortcut for `get().collect(collector)`
- * See [get]
+ * See [flow]
  * See [Flow.collect]
  */
 public suspend fun <T : State?> Key<T>.collect(collector: FlowCollector<T>) {
-    get().collect(collector)
+    flow().collect(collector)
 }
 
 
@@ -219,15 +219,20 @@ internal class StatesImpl : States {
         return getOrCreateMutableStateFlow(key)
     }
 
-    private fun <T : State?> getOrCreateMutableStateFlow(key: Key<T>): MutableStateFlow<T> = lock.withLock {
-        @Suppress("UNCHECKED_CAST")
-        return states.getOrPut(key) {
-            MutableStateFlow(key.default).also { state ->
-                producers.forEach { producer ->
-                    producer.launchIfApplicable(key, state)
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : State?> getOrCreateMutableStateFlow(key: Key<T>): MutableStateFlow<T>  {
+        /* fast path: No locking required, flow is already available */
+        states[key]?.let { return it as MutableStateFlow<T> }
+
+        return lock.withLock {
+            states.getOrPut(key) {
+                MutableStateFlow(key.default).also { state ->
+                    producers.forEach { producer ->
+                        producer.launchIfApplicable(key, state)
+                    }
                 }
-            }
-        } as MutableStateFlow<T>
+            } as MutableStateFlow<T>
+        }
     }
 }
 

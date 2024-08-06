@@ -52,6 +52,7 @@ final class <#A: io.sellmair.evas/State?> io.sellmair.evas/StateProducerScope : 
         final fun <get-coroutineContext>(): kotlin.coroutines/CoroutineContext // io.sellmair.evas/StateProducerScope.coroutineContext.<get-coroutineContext>|<get-coroutineContext>(){}[0]
 
     final suspend fun (#A).emit() // io.sellmair.evas/StateProducerScope.emit|emit@1:0(){}[0]
+    final suspend fun emit(#A) // io.sellmair.evas/StateProducerScope.emit|emit(1:0){}[0]
     final suspend fun emitAll(kotlinx.coroutines.flow/Flow<#A>) // io.sellmair.evas/StateProducerScope.emitAll|emitAll(kotlinx.coroutines.flow.Flow<1:0>){}[0]
 }
 
@@ -107,8 +108,8 @@ final inline fun <#A: reified io.sellmair.evas/State.Key<#B>, #B: io.sellmair.ev
 final suspend fun (io.sellmair.evas/Event).io.sellmair.evas/emit() // io.sellmair.evas/emit|emit@io.sellmair.evas.Event(){}[0]
 final suspend fun (io.sellmair.evas/Event).io.sellmair.evas/emitAsync() // io.sellmair.evas/emitAsync|emitAsync@io.sellmair.evas.Event(){}[0]
 final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/collect(kotlinx.coroutines.flow/FlowCollector<#A>) // io.sellmair.evas/collect|collect@io.sellmair.evas.State.Key<0:0>(kotlinx.coroutines.flow.FlowCollector<0:0>){0§<io.sellmair.evas.State?>}[0]
-final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/get(): kotlinx.coroutines.flow/StateFlow<#A> // io.sellmair.evas/get|get@io.sellmair.evas.State.Key<0:0>(){0§<io.sellmair.evas.State?>}[0]
-final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/getValue(): #A // io.sellmair.evas/getValue|getValue@io.sellmair.evas.State.Key<0:0>(){0§<io.sellmair.evas.State?>}[0]
+final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/flow(): kotlinx.coroutines.flow/StateFlow<#A> // io.sellmair.evas/flow|flow@io.sellmair.evas.State.Key<0:0>(){0§<io.sellmair.evas.State?>}[0]
 final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/set(#A) // io.sellmair.evas/set|set@io.sellmair.evas.State.Key<0:0>(0:0){0§<io.sellmair.evas.State?>}[0]
+final suspend fun <#A: io.sellmair.evas/State?> (io.sellmair.evas/State.Key<#A>).io.sellmair.evas/value(): #A // io.sellmair.evas/value|value@io.sellmair.evas.State.Key<0:0>(){0§<io.sellmair.evas.State?>}[0]
 final suspend inline fun <#A: reified io.sellmair.evas/Event> io.sellmair.evas/collectEvents(noinline kotlin.coroutines/SuspendFunction1<#A, kotlin/Unit>) // io.sellmair.evas/collectEvents|collectEvents(kotlin.coroutines.SuspendFunction1<0:0,kotlin.Unit>){0§<io.sellmair.evas.Event>}[0]
 final suspend inline fun <#A: reified io.sellmair.evas/Event> io.sellmair.evas/events(): kotlinx.coroutines.flow/Flow<#A> // io.sellmair.evas/events|events(){0§<io.sellmair.evas.Event>}[0]

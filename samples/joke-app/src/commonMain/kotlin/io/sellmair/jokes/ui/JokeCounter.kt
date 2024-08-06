@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import io.sellmair.evas.compose.collectAsValue
+import io.sellmair.evas.compose.composeValue
 import io.sellmair.jokes.JokeCounterState
 
 @Composable
@@ -25,7 +25,7 @@ fun JokeCounter() {
 
         Row {
             Text(
-                JokeCounterState.collectAsValue().jokesCount.toString(),
+                JokeCounterState.composeValue().jokesCount.toString(),
                 fontSize = 64.sp,
                 fontWeight = FontWeight.Thin,
                 modifier = Modifier.testTag(UiTags.JokeCounterText.name)
