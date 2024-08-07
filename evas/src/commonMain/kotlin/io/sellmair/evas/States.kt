@@ -60,11 +60,11 @@ public fun States(): States = StatesImpl()
  * }
  *
  * // Define the state producer
- * fun CoroutineScope.launchUserLoginStateActor() = launchStateProducer(UserLoginState) {
+ * fun CoroutineScope.launchUserLoginState() = launchState(UserLoginState) {
  *     val user = getUserFromDatabase()
  *     if(user!=null) {
  *         LoggedIn(user.userId).emit()
- *         return@launchStateProducer
+ *         return@launchState
  *     }
  *
  *     LoggedOut.emit()
@@ -86,7 +86,7 @@ public fun States(): States = StatesImpl()
  * ```kotlin
  * @Composable
  * fun LoginScreen() {
- *     val loginState = UserLoginState.collectAsValue()
+ *     val loginState = UserLoginState.composeValue()
  *     //                                   ^
  *     //         Will trigger re-composition if the state changes
  *

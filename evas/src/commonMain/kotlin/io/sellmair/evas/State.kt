@@ -38,7 +38,7 @@ import io.sellmair.evas.State.Key
  * ### Using dynamic keys with cold state producers
  * Using the `ProfileData` from the previous example:
  * ```kotlin
- * fun CoroutineScope.launchProfileDataLoader() = launchStateProducer(
+ * fun CoroutineScope.launchProfileDataLoader() = launchState(
  *    keepActive = 1.minutes
  * ) { key: ProfileData.Key ->
  *     val httpResponse = httpClient().requestProfileData(key.userId)
@@ -56,7 +56,7 @@ import io.sellmair.evas.State.Key
  * ```kotlin
  * @Composable
  * fun ProfilePage(userId: UserId) {
- *     val profileData = ProfileData.Key(userId).collectAsValue()
+ *     val profileData = ProfileData.Key(userId).composeValue()
  *     //                    ^
  *     //         Triggers the state producer to kick in (if not active already)
  *     // ...

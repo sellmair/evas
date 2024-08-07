@@ -1,7 +1,7 @@
 # Evas: **Ev**ents **a**nd **S**tates for Kotlin
 
 <p>
-<img src=".img/banner.png" width="512"
+<img src=".img/banner.png" width="512" align="middle"
 alt="Evas logo by Sebastian Sellmair">
 </p>
 
@@ -17,7 +17,7 @@ alt="Evas logo by Sebastian Sellmair">
 
 ---
 
-## Use
+## Dependencies
 
 ```kotlin
 implementation("io.sellmair:evas:1.0.0-alpha05")
@@ -27,8 +27,92 @@ implementation("io.sellmair:evas:1.0.0-alpha05")
 ```kotlin
 implementation("io.sellmair:evas-compose:1.0.0-alpha05")
 ```
-
 ---
+
+# Simple Usage
+## Send and Subscribe to Events
+```kotlin
+object LogoutEvent: Event
+
+data class LoginEvent(
+    val userName: String, 
+    val token: String
+): Event
+
+suspend fun listenForLogout() = collectEvents<LogoutEvent> {
+    println("User logged out")
+}
+
+suspend fun listenForLogin() = collectEvents<LoginEvent> { event -> 
+    println("User: ${event.userName} logged in")
+}
+
+suspend fun login(userName: String, password: String) {
+    val token = httpClient().login(userName, password) ?: return
+    LoginEvent(userName, token).emit()
+}
+
+suspend fun logout() {
+    deleteUserData()
+    LogoutEvent.emit()
+}
+
+```
+
+## Launch State Producer & Show Compose UI
+### Define a 'hot' state and 'hot' state producer
+ ```kotlin
+ // Define the state
+ sealed class UserLoginState: State {
+     companion object Key<UserLoginState>: State.Key {
+         val default = LoggedOut
+     }
+
+     data object LoggedOut: UserLoginState()
+     data object LoggingIn: UserLoginState()
+     data class LoggedIn(val userId: UserId): UserLoginState()
+ }
+
+ // Define the state producer
+ fun CoroutineScope.launchUserLoginState() = launchState(UserLoginState) {
+     val user = getUserFromDatabase()
+     if(user!=null) {
+         LoggedIn(user.userId).emit()
+         return@launchState
+     }
+
+     LoggedOut.emit()
+
+     collectEvents<LoginRequest>() { request ->
+         LoggingIn.emit()
+
+         val response = sendLoginRequestToServer(request.user, request.password)
+         if(response.isSuccess) {
+             LoggedIn(response.userId).emit()
+         } else {
+             LoggedOut.emit()
+         }
+     }
+ }
+ ```
+
+ ### Use State in UI development (e.g., compose, using `io.sellmair:evas-compose`)
+ ```kotlin
+ @Composable
+ fun LoginScreen() {
+     val loginState = UserLoginState.composeValue()
+     //                                   ^
+     //         Will trigger re-composition if the state changes
+
+     when(loginState) {
+         is LoggedOut -> // ...
+         is LoggingIn -> // ...
+         is LoggedIn -> // ...
+     }
+ }
+ ```
+
+___
 
 # Sample Projects
 ## Login Screen App (iOS, Android, Desktop App)
