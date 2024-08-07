@@ -1,6 +1,6 @@
 public final class io/sellmair/evas/compose/ComposeExtensionsKt {
-	public static final fun EvasLaunching (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)Lkotlin/jvm/functions/Function0;
-	public static final fun EvasLaunching (Lkotlin/coroutines/CoroutineContext;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lkotlin/jvm/functions/Function1;
+	public static final fun EvasLaunching (Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/CoroutineStart;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)Lkotlin/jvm/functions/Function0;
+	public static final fun EvasLaunching (Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/CoroutineStart;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)Lkotlin/jvm/functions/Function1;
 	public static final fun composeFlow (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Lkotlinx/coroutines/flow/StateFlow;
 	public static final fun composeSet (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Landroidx/compose/runtime/Composer;I)V
 	public static final fun composeState (Lio/sellmair/evas/State$Key;Landroidx/compose/runtime/Composer;I)Landroidx/compose/runtime/State;

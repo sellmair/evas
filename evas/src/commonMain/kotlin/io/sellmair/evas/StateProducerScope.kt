@@ -13,11 +13,20 @@ public class StateProducerScope<T : State?> internal constructor(
 ) : CoroutineScope {
     override val coroutineContext: CoroutineContext = scope.coroutineContext
 
+    /**
+     * Will emit [value] as the current state
+     */
     @JvmName("emitState")
     public suspend fun emit(value: T): Unit = scope.channel.send(value)
 
+    /**
+     * Will emit [T] as the current state
+     */
     public suspend fun T.emit(): Unit = scope.channel.send(this)
 
+    /**
+     * Will emit all values of [flow] as state
+     */
     public suspend infix fun emitAll(flow: Flow<T>) {
         flow.collect { element -> scope.channel.send(element) }
     }

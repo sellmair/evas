@@ -10,6 +10,63 @@ import kotlin.time.Duration
 
 public typealias ColdStateProducer<K, T> = suspend StateProducerScope<T>.(key: K) -> Unit
 
+/**
+ * Launching coroutines, producing [State]s 'cold' for request State keys.
+ * Every state launching a coroutine will receive the exact 'requesting' key as input:
+ *
+ * ## Example usage
+ * ### User 'online' status state
+ *
+ * Definition of the 'State' and the 'Key':
+ * Note, the online state of a user requires the key to carry the userId!
+ *
+ * ```kotlin
+ * data class UserOnlineState(val isOnline: Boolean, val lastOnline: Date?): State {
+ *     data class Key(val userId: UserId): State.Key<UserOnlineState> {
+ *         override val default = UserOnlineState(false, null)
+ *     }
+ * }
+ * ```
+ *
+ * UI requesting the user's online status
+ * ```kotlin
+ * @Composable
+ * fun UserOnlineStatusBanner(user: UserId) {
+ *     val onlineState = UserOnlineState.Key(user).composeValue()
+ *                         //             ^
+ *                         // Requesting the state for exactly this user
+ *
+ *     Text(if(onlineState.isOnline) "Online" else "Offline")
+ *     if(onlineState.lastOnline != null) Text("Last online: ${onlineState.lastOnline}")
+ * }
+ * ```
+ *
+ * launching the State:
+ * ```kotlin
+ * fun CoroutineScope.launchUserOnlineState() = launchState { key: UserOnlineState.Key ->
+ *      var lastOnlineDate: Date? = null
+ *      while(isActive) {
+ *         //    ^
+ *         // Will be active until no more subscribers to this State (key) are present
+ *
+ *          val isOnline = httpClient.isUserOnline(key.user)
+ *          if(isOnline) {
+ *              lastOnlineDate = Date.now()
+ *          }
+ *          UserOnlineState(isOnline, lastOnlineDate).emit()
+ *          delay(5.seconds)
+ *      }
+ * }
+ * ```
+ *
+ * @param keepActive Allows keeping a state-producing coroutine active for the specified period of time
+ * after no more subscribers are present
+ *
+ * @param onInactive Allows specifying what to do once the state-producing coroutine dies
+ * - default: [OnInactive.resetValue]: Will reset the state to its default value
+ * - option: [OnInactive.keepValue]: Will keep the last state value
+ * - option: Provide a coroutine that can emit further states
+ */
 public inline fun <reified K : State.Key<T>, T : State?> CoroutineScope.launchState(
     coroutineContext: CoroutineContext = EmptyCoroutineContext,
     keepActive: Duration = Duration.ZERO,

@@ -42,7 +42,7 @@ class StatesCoroutinesTest {
 
     @Test
     fun `test - dispatcher`() = runTest(States()) {
-        launchState(TestState.Key, coroutineContext = singleThreadDispatcher) {
+        launchState(TestState.Key, context = singleThreadDispatcher) {
             assert(Thread.currentThread() === singleThread.value)
             TestState(42).emit()
         }

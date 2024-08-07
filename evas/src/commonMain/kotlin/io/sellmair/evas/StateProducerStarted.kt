@@ -2,7 +2,14 @@ package io.sellmair.evas
 
 public sealed class StateProducerStarted {
     public companion object {
+        /**
+         * A state-producing coroutine shall be started as soon as possible.
+         */
         public val Eagerly: StateProducerStarted get() = StateProducerStartedEagerly
+
+        /**
+         * A state-producing coroutine shall only be started once at least one subscriber is present
+         */
         public val Lazily: StateProducerStarted get() = StateProducerStartedLazily
     }
 }
