@@ -20,12 +20,12 @@ alt="Evas logo by Sebastian Sellmair">
 ## Dependencies
 
 ```kotlin
-implementation("io.sellmair:evas:1.0.0-alpha05")
+implementation("io.sellmair:evas:1.0.0-beta01")
 ```
 
 (Compose Extensions)
 ```kotlin
-implementation("io.sellmair:evas-compose:1.0.0-alpha05")
+implementation("io.sellmair:evas-compose:1.0.0-beta01")
 ```
 ---
 
