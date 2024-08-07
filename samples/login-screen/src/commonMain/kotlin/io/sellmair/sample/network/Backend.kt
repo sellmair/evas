@@ -1,4 +1,4 @@
-package io.sellmair.sample.loginScreen.network
+package io.sellmair.sample.network
 
 import kotlinx.coroutines.delay
 import kotlin.random.Random

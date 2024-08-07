@@ -1,8 +1,8 @@
 package io.sellmair.sample.loginScreen
 
 import io.sellmair.evas.*
-import io.sellmair.sample.loginScreen.network.Backend
-import io.sellmair.sample.loginScreen.network.LoginResult
+import io.sellmair.sample.network.Backend
+import io.sellmair.sample.network.LoginResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

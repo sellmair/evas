@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("org.jetbrains.kotlinx.atomicfu")
+    org.jetbrains.kotlinx.atomicfu
     org.jetbrains.kotlinx.`binary-compatibility-validator`
     org.jetbrains.kotlinx.benchmark
     `evas-publish`

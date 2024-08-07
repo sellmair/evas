@@ -3,8 +3,6 @@ import io.sellmair.evas.Events
 import io.sellmair.evas.collectEvents
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
-import kotlinx.atomicfu.locks.reentrantLock
-import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,11 +23,15 @@ class EventsLincheck {
 
     private val allEvents = atomic(emptyList<TestEvent>())
 
+    private fun addEvent(event: TestEvent) {
+        allEvents.getAndUpdate { events -> events + event }
+    }
+
     init {
         CoroutineScope(Dispatchers.Unconfined + Events()).launch {
             collectEvents<TestEvent> {
                 lastEvent = it
-                allEvents.getAndUpdate { events -> events + it }
+                addEvent(it)
             }
         }
     }
