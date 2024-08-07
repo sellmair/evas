@@ -1,8 +1,7 @@
 import io.sellmair.evas.State
 import io.sellmair.evas.collectEventsAsync
-import io.sellmair.evas.launchStateProducer
+import io.sellmair.evas.launchState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 data class SummaryState(
     val files: Int,
@@ -14,7 +13,7 @@ data class SummaryState(
     }
 }
 
-fun CoroutineScope.launchSummaryStateActor() = launchStateProducer(SummaryState) {
+fun CoroutineScope.launchSummaryState() = launchState(SummaryState) {
     var statistics = SummaryState.default
 
     collectEventsAsync<DirectoryDiscoveredEvent> {

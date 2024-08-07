@@ -11,8 +11,8 @@ import okio.Path.Companion.toPath
 
 fun main(args: Array<String>): Unit = runBlocking(Events() + States() + SupervisorJob()) {
     launchUiActor()
-    launchSummaryStateActor()
-    launchInitialPathsStateActor()
+    launchSummaryState()
+    launchInitialPathsState()
     launchDiscoveryActors()
 
     /* Send arguments, representing the entry points, as events */

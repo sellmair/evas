@@ -1,6 +1,6 @@
 import io.sellmair.evas.State
 import io.sellmair.evas.collectEvents
-import io.sellmair.evas.launchStateProducer
+import io.sellmair.evas.launchState
 import kotlinx.coroutines.CoroutineScope
 import okio.Path
 
@@ -10,7 +10,7 @@ data class InitialPathsState(val initialPaths: List<Path>) : State {
     }
 }
 
-fun CoroutineScope.launchInitialPathsStateActor() = launchStateProducer(InitialPathsState) {
+fun CoroutineScope.launchInitialPathsState() = launchState(InitialPathsState) {
     var state = InitialPathsState(emptyList())
     state.emit()
     collectEvents<InitialPathEvent> { event ->
