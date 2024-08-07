@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlin.coroutines.CoroutineContext
 import kotlin.experimental.ExperimentalTypeInference
-import kotlin.jvm.JvmField
 import kotlin.jvm.JvmName
 
 public class StateProducerScope<T : State?> internal constructor(

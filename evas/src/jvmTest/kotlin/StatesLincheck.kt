@@ -47,14 +47,14 @@ class StatesLincheck {
 
     @Operation
     fun launchAProducer(value: Int): Unit = runBlocking(states) {
-        launchStateProducer(StateA) {
+        launchState(StateA) {
             StateA(value).emit()
         }
     }
 
     @Operation
     fun launchBProducer(value: Int): Unit = runBlocking(states) {
-        launchStateProducer(StateB) {
+        launchState(StateB) {
             StateB(value).emit()
         }
     }

@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         val states = States()
 
         lifecycleScope.launch(events + states) {
-            launchStateActors()
+            launchStates()
         }
 
         setContent {

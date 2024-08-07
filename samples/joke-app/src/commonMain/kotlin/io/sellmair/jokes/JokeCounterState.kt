@@ -2,8 +2,7 @@ package io.sellmair.jokes
 
 import io.sellmair.evas.State
 import io.sellmair.evas.collect
-import io.sellmair.evas.flow
-import io.sellmair.evas.launchStateProducer
+import io.sellmair.evas.launchState
 import kotlinx.coroutines.CoroutineScope
 
 data class JokeCounterState(val jokesCount: Int) : State {
@@ -12,7 +11,7 @@ data class JokeCounterState(val jokesCount: Int) : State {
     }
 }
 
-fun CoroutineScope.launchJokeCounterActor() = launchStateProducer(JokeCounterState) {
+fun CoroutineScope.launchJokeCounterState() = launchState(JokeCounterState) {
     var state = JokeCounterState.default
 
     CurrentJokeState.collect { currentJokeState ->

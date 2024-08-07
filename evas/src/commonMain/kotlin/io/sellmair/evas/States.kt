@@ -104,7 +104,7 @@ public sealed interface States : CoroutineContext.Element {
     /**
      * Immediately sets the state for the given [key]. All state listeners will be notified.
      * This API is especially useful when writing tests.
-     * For most production use cases [launchStateProducer] is more suitable.
+     * For most production use cases [launchState] is more suitable.
      */
     public fun <T : State?> setState(key: State.Key<T>, value: T)
 
@@ -112,7 +112,7 @@ public sealed interface States : CoroutineContext.Element {
      * Will return the state associated by the given [key] as [StateFlow].
      * Note: Subscribing to the returned [StateFlow] will trigger the 'State Producers' if the given
      * state is cold.
-     * See [launchStateProducer]
+     * See [launchState]
      */
     public fun <T : State?> getState(key: State.Key<T>): StateFlow<T>
 

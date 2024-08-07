@@ -17,7 +17,7 @@ sealed class UserLoginState : State {
     data class LoggedIn(val email: String, val token: String) : UserLoginState()
 }
 
-fun CoroutineScope.launchUserLoginStateActor() = launchStateProducer(UserLoginState, Dispatchers.Main.immediate) {
+fun CoroutineScope.launchUserLoginState() = launchState(UserLoginState, Dispatchers.Main.immediate) {
     val passwordStateFlow = events<PasswordChangedEvent>().map { it.password }
         .stateIn(this, SharingStarted.Eagerly, null)
 

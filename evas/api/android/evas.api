@@ -5,14 +5,10 @@ public final class io/sellmair/evas/ColdStateProducerImpl : io/sellmair/evas/Sta
 }
 
 public final class io/sellmair/evas/ColdStateProducerKt {
-	public static final fun launchStateProducer-WPi__2c (Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;JLkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/reflect/KClass;)Lkotlinx/coroutines/Job;
+	public static final fun launchState-WPi__2c (Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;JLkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/reflect/KClass;)Lkotlinx/coroutines/Job;
 }
 
 public class io/sellmair/evas/EvasException : java/lang/Exception {
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public fun <init> (Ljava/lang/Throwable;)V
 }
 
 public abstract interface class io/sellmair/evas/Event {
@@ -55,8 +51,8 @@ public final class io/sellmair/evas/EventsKt$sam$i$kotlinx_coroutines_flow_FlowC
 }
 
 public final class io/sellmair/evas/HotStateProducerKt {
-	public static final fun launchStateProducer (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
-	public static synthetic fun launchStateProducer$default (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+	public static final fun launchState (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
+	public static synthetic fun launchState$default (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
 }
 
 public final class io/sellmair/evas/MissingEventsException : io/sellmair/evas/EvasException {

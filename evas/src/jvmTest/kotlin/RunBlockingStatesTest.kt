@@ -1,6 +1,6 @@
 import io.sellmair.evas.State
 import io.sellmair.evas.States
-import io.sellmair.evas.launchStateProducer
+import io.sellmair.evas.launchState
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,7 +17,7 @@ class RunBlockingStatesTest {
     @Test
     fun `test with run blocking`() {
         runBlocking(states) {
-            launchStateProducer(TestState) {
+            launchState(TestState) {
                 TestState(42).emit()
             }
         }

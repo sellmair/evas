@@ -45,7 +45,7 @@ class EventsCoroutinesTest {
     @Test
     fun `test - listener in scope producer is registered inline`() = runTest(Events() + States()) {
         val events = currentCoroutineContext().eventsOrThrow as EventsImpl
-        launchStateProducer(TestState, UnconfinedTestDispatcher(testScheduler)) {
+        launchState(TestState, UnconfinedTestDispatcher(testScheduler)) {
             collectEventsAsync<Event> { }
         }
 

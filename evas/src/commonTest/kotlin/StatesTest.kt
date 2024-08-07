@@ -29,8 +29,8 @@ class StatesTest {
     fun `test - cold producer`() = runTest(States()) {
         val collectedStates = mutableListOf<ColdState?>()
 
-        val producer = launchStateProducer { key: ColdState.Key ->
-            if (key.id is List<*>) return@launchStateProducer
+        val producer = launchState { key: ColdState.Key ->
+            if (key.id is List<*>) return@launchState
             ColdState(key.id).emit()
         }
 
@@ -51,7 +51,7 @@ class StatesTest {
 
     @Test
     fun `test - cold producer - state reset`() = runTest(States()) {
-        launchStateProducer { _: ColdState.Key ->
+        launchState { _: ColdState.Key ->
             var i = 0
             while (isActive) {
                 ColdState(i).emit()
@@ -80,7 +80,7 @@ class StatesTest {
 
     @Test
     fun `test - hot producer`() = runTest(States()) {
-        launchStateProducer(HotState.Key) {
+        launchState(HotState.Key) {
             HotState("Hello").emit()
         }
 
@@ -92,7 +92,7 @@ class StatesTest {
     @Test
     fun `test - hot producer - is shared`() = runTest(States()) {
         var isLaunched = false
-        launchStateProducer(HotState.Key) {
+        launchState(HotState.Key) {
             HotState("Hello").emit()
             assertFalse(isLaunched)
             isLaunched = true
@@ -108,7 +108,7 @@ class StatesTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `test - keepActive`() = runTest(States()) {
-        launchStateProducer(keepActive = 3.seconds + 1.milliseconds) { _: ColdState.Key ->
+        launchState(keepActive = 3.seconds + 1.milliseconds) { _: ColdState.Key ->
             while (currentCoroutineContext().isActive) {
                 ColdState(currentTime).emit()
                 delay(1.seconds)
@@ -142,7 +142,7 @@ class StatesTest {
     @Test
     fun `test - keepActive - resubscribe`() = runTest(States()) {
         var launched = false
-        launchStateProducer(keepActive = 2.seconds + 1.milliseconds) { _: ColdState.Key ->
+        launchState(keepActive = 2.seconds + 1.milliseconds) { _: ColdState.Key ->
             assertFalse(launched, "Another producer was already launched!")
             launched = true
             while (currentCoroutineContext().isActive) {
@@ -178,7 +178,7 @@ class StatesTest {
 
     @Test
     fun `test - hot state producer job - is completed after corotuine finished`() = runTest(States()) {
-        val stateProducerJob = launchStateProducer(HotState, StandardTestDispatcher(testScheduler)) {
+        val stateProducerJob = launchState(HotState, StandardTestDispatcher(testScheduler)) {
             HotState(42).emit()
         }
 
@@ -189,7 +189,7 @@ class StatesTest {
 
     @Test
     fun `test - hot state producer is started eagerly`() = runTest(States()) {
-        launchStateProducer(HotState, StandardTestDispatcher(testScheduler)) {
+        launchState(HotState, StandardTestDispatcher(testScheduler)) {
             HotState(42).emit()
         }
 
@@ -201,7 +201,7 @@ class StatesTest {
     fun `test - hot state started lazily`() = runTest(States()) {
         var isSubscribed = false
 
-        val stateProducerJob = launchStateProducer(HotState, StandardTestDispatcher(testScheduler), StateProducerStarted.Lazily) {
+        val stateProducerJob = launchState(HotState, StandardTestDispatcher(testScheduler), StateProducerStarted.Lazily) {
             assertTrue(isSubscribed, "Expected state producer to only be launched after at least one subscription")
             HotState(42).emit()
         }

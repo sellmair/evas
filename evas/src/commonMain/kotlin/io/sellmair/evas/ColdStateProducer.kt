@@ -10,12 +10,12 @@ import kotlin.time.Duration
 
 public typealias ColdStateProducer<K, T> = suspend StateProducerScope<T>.(key: K) -> Unit
 
-public inline fun <reified K : State.Key<T>, T : State?> CoroutineScope.launchStateProducer(
+public inline fun <reified K : State.Key<T>, T : State?> CoroutineScope.launchState(
     coroutineContext: CoroutineContext = EmptyCoroutineContext,
     keepActive: Duration = Duration.ZERO,
     noinline onInactive: suspend StateProducerScope<T>.(key: K) -> Unit = OnInactive.resetValue(),
     noinline produce: ColdStateProducer<K, T>
-): Job = launchStateProducer(
+): Job = launchState(
     coroutineContext = coroutineContext,
     keepActive = keepActive,
     onInactive = onInactive,
@@ -24,7 +24,7 @@ public inline fun <reified K : State.Key<T>, T : State?> CoroutineScope.launchSt
 )
 
 @PublishedApi
-internal fun <K : State.Key<T>, T : State?> CoroutineScope.launchStateProducer(
+internal fun <K : State.Key<T>, T : State?> CoroutineScope.launchState(
     coroutineContext: CoroutineContext,
     keepActive: Duration,
     onInactive: ColdStateProducer<K, T>,

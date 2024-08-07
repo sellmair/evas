@@ -5,7 +5,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.sellmair.evas.State
 import io.sellmair.evas.events
-import io.sellmair.evas.launchStateProducer
+import io.sellmair.evas.launchState
 import io.sellmair.jokes.network.httpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -21,7 +21,7 @@ sealed class CurrentJokeState : State {
     data class Joke(val joke: String) : CurrentJokeState()
 }
 
-fun CoroutineScope.launchJokeLoadingActor(): Job = launchStateProducer(CurrentJokeState) {
+fun CoroutineScope.launchJokeLoadingState(): Job = launchState(CurrentJokeState) {
     suspend fun loadJoke() {
         CurrentJokeState.Loading.emit()
 

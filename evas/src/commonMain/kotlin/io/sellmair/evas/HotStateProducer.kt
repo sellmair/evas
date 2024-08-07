@@ -9,7 +9,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 
-public fun <T : State?> CoroutineScope.launchStateProducer(
+public fun <T : State?> CoroutineScope.launchState(
     key: State.Key<T>,
     coroutineContext: CoroutineContext = EmptyCoroutineContext,
     started: StateProducerStarted = StateProducerStarted.Eagerly,

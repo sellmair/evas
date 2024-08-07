@@ -6,7 +6,7 @@ import io.sellmair.evas.States
 import io.sellmair.evas.compose.installEvas
 import io.sellmair.sample.UserState
 import io.sellmair.sample.loginScreen.UserLoginState
-import io.sellmair.sample.loginScreen.launchLoginScreenActor
+import io.sellmair.sample.loginScreen.launchLoginScreenStates
 import io.sellmair.sample.ui.LoginScreen
 import io.sellmair.sample.ui.Tags.LoginScreen
 import kotlinx.coroutines.*
@@ -27,7 +27,7 @@ class LoginScreenUiTest {
         runBlocking(events + states + Job()) {
             /* Start the necessary actors we want to run for this test */
             launch(Dispatchers.Main.immediate) {
-                launchLoginScreenActor()
+                launchLoginScreenStates()
             }
 
             states.setState(UserState, UserState.NotLoggedIn)

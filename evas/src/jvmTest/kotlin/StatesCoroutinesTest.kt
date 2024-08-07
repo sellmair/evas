@@ -1,13 +1,11 @@
 import io.sellmair.evas.State
 import io.sellmair.evas.States
 import io.sellmair.evas.flow
-import io.sellmair.evas.launchStateProducer
+import io.sellmair.evas.launchState
 import kotlinx.atomicfu.atomic
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.runTest
 import java.util.concurrent.Executors
 import kotlin.test.AfterTest
@@ -44,7 +42,7 @@ class StatesCoroutinesTest {
 
     @Test
     fun `test - dispatcher`() = runTest(States()) {
-        launchStateProducer(TestState.Key, coroutineContext = singleThreadDispatcher) {
+        launchState(TestState.Key, coroutineContext = singleThreadDispatcher) {
             assert(Thread.currentThread() === singleThread.value)
             TestState(42).emit()
         }

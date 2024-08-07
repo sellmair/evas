@@ -14,7 +14,7 @@ fun main() = application {
     val states = States()
 
     rememberCoroutineScope { events + states }
-        .launchStateActors()
+        .launchStates()
 
     installEvents(events) {
         installStates(states) {

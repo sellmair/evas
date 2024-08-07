@@ -77,7 +77,7 @@ open class HotStateProducerBenchmark {
     CI (99.9%): [529915.753, 537963.087] (assumes normal distribution)
      */
     @Benchmark
-    fun updateStateUsingProducer(): Unit = coroutineScope.launchStateProducer(StateA, Dispatchers.Unconfined) {
+    fun updateStateUsingProducer(): Unit = coroutineScope.launchState(StateA, Dispatchers.Unconfined) {
         StateA(id = random.nextInt()).emit()
     }.job.asCompletableFuture().join()
 
@@ -89,11 +89,11 @@ open class HotStateProducerBenchmark {
     @Benchmark
     fun twoStateProducers() = runBlocking(states) {
         coroutineScope {
-            coroutineScope.launchStateProducer(StateA, Dispatchers.Unconfined) {
+            coroutineScope.launchState(StateA, Dispatchers.Unconfined) {
                 StateA(id = random.nextInt()).emit()
             }
 
-            coroutineScope.launchStateProducer(StateB, Dispatchers.Unconfined) {
+            coroutineScope.launchState(StateB, Dispatchers.Unconfined) {
                 StateB(id = random.nextInt()).emit()
             }
         }

@@ -4,7 +4,7 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.set
 import io.sellmair.evas.State
 import io.sellmair.evas.collectEventsAsync
-import io.sellmair.evas.launchStateProducer
+import io.sellmair.evas.launchState
 import io.sellmair.sample.loginScreen.UserLoginEvent
 import io.sellmair.sample.loginScreen.UserLogoutEvent
 import kotlinx.coroutines.CoroutineScope
@@ -20,7 +20,7 @@ sealed class UserState : State {
 }
 
 
-fun CoroutineScope.launchUserStateActor() = launchStateProducer(UserState, Dispatchers.Main.immediate) {
+fun CoroutineScope.launchUserState() = launchState(UserState, Dispatchers.Main.immediate) {
     val settings = Settings()
     val userEmail = settings.getStringOrNull("user.email")
     val userToken = settings.getStringOrNull("user.token")

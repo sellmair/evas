@@ -14,7 +14,7 @@ fun createViewController() = ComposeUIViewController {
     val states = States()
 
     rememberCoroutineScope { events + states }
-        .launchStateActors()
+        .launchStates()
 
     installEvents(events) {
         installStates(states) {
