@@ -170,9 +170,21 @@ fun CoroutineScope.launchClickCounterPrinter() = launch {
 ## Launch State Producer & Show Compose UI
 
 ### Define a 'hot' state and 'hot' state producer
+In this example we're going to model the 'Login State' of a user which can be
+a) Logged Out
+b) Currently Logging In
+c) Logged In
 
+For this the State can be modeled using a sealed class.
+
+The state will be produced by a 'launchState' coroutine, which will try to find the user data
+from a local database and handles login requests (sent as events)
+
+[snippet]: (hotUserLoginState.kt)
  ```kotlin
- // Define the state
+/*
+Defining the State
+ */
 sealed class UserLoginState : State {
     companion object Key : State.Key<UserLoginState> {
         override val default = LoggedOut
@@ -183,7 +195,9 @@ sealed class UserLoginState : State {
     data class LoggedIn(val userId: UserId) : UserLoginState()
 }
 
-// Define the state producer
+/*
+Launch the 'State producing coroutine'
+ */
 fun CoroutineScope.launchUserLoginState() = launchState(UserLoginState) {
     val user = getUserFromDatabase()
     if (user != null) {
@@ -193,7 +207,7 @@ fun CoroutineScope.launchUserLoginState() = launchState(UserLoginState) {
 
     LoggedOut.emit()
 
-    collectEvents<LoginRequest>() { request ->
+    collectEvents<LoginRequest> { request ->
         LoggingIn.emit()
 
         val response = sendLoginRequestToServer(request.user, request.password)
