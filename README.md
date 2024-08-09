@@ -8,9 +8,9 @@ alt="Evas logo by Sebastian Sellmair">
 ## Overview
 
 - ✅ Multiplatform (jvm, android, iOS, watchOS, macOS, linux, windows, wasm, js, ...)
-- ✅ Fast / Performance Benchmarked (kotlinx.benchmark)
+- ✅ Fast / Performance benchmarked (kotlinx.benchmark)
 - ✅ Concurrency tested (kotlinx.lincheck)
-- ✅ API surface tested (kotlinx.binary-compatibility-validator)
+- ✅ API stability tested (kotlinx.binary-compatibility-validator)
 - ✅ Tiny Binary Size (~ 90kb)
 - ➕ Compose Extensions
 - ➕ Inline documentation with 'usage examples'
@@ -47,7 +47,7 @@ withContext(events + states) {
 }
 ```
 
-### Composition Local (compose extension)
+### Compose Extensions
 Binding the event bus or state container to compose is as simple as
 
 [snippet]: (setup-compose.kt)
@@ -63,33 +63,77 @@ fun App() {
 }
 ```
 
+## Simple State
+Defining a simple State counting the number of 'clicks' performed by a user
+[snippet]: (simpleClickCounterState.kt)
+```kotlin
+data class ClickCounterState(val count: Int) : State {
+    /*
+    Using the 'companion object' as Key, defining '0' as default state
+     */
+    companion object Key : State.Key<ClickCounterState> {
+        override val default: ClickCounterState = ClickCounterState(count = 0)
+    }
+}
+
+fun CoroutineScope.launchClickCounterState() = launchState(ClickCounterState) {
+    var count = 0
+    collectEvents<ClickEvent> {
+        count++
+        ClickCounterState(count).emit()
+        //                        ^
+        //                 Emit State Update
+    }
+}
+
+suspend fun onClick() {
+    ClickEvent.emit()
+    //          ^
+    // emit event and wait for all listening coroutines to finish
+}
+```
+
+Using this state and print updates to the console
+[snippet]: (usingClickCounterState.kt)
+```kotlin
+fun CoroutineScope.launchClickCounterPrinter() = launch {
+    ClickCounterState.flow().collect { state ->
+        println("Click Count: ${state.count}")
+    }
+}
+```
+
 ## Send and Subscribe to Events
+
+[snippet]: (loginEvents.kt)
 ```kotlin
 object LogoutEvent: Event
 
-data class LoginEvent(
-    val userName: String, 
-    val token: String
-): Event
+data class LoginEvent(val userName: String, val token: String): Event
 
 suspend fun listenForLogout() = collectEvents<LogoutEvent> {
     println("User logged out")
 }
 
-suspend fun listenForLogin() = collectEvents<LoginEvent> { event -> 
+suspend fun listenForLogin() = collectEvents<LoginEvent> { event ->
     println("User: ${event.userName} logged in")
 }
 
 suspend fun login(userName: String, password: String) {
     val token = httpClient().login(userName, password) ?: return
     LoginEvent(userName, token).emit()
+                    //          ^
+                    // Actually emit the event and suspend until
+                    // All listeners have finished processing this event
 }
 
 suspend fun logout() {
     deleteUserData()
     LogoutEvent.emit()
+    //          ^
+    // Actually emit the event and suspend until
+    // All listeners have finished processing this event
 }
-
 ```
 
 ## Launch State Producer & Show Compose UI
@@ -130,19 +174,21 @@ suspend fun logout() {
  ```
 
  ### Use State in UI development (e.g., compose, using `io.sellmair:evas-compose`)
+[snippet]: (composeValue.kt)
  ```kotlin
- @Composable
- fun LoginScreen() {
-     val loginState = UserLoginState.composeValue()
-     //                                   ^
-     //         Will trigger re-composition if the state changes
+@Composable
+fun App() {
+    val loginState = UserLoginState.composeValue()
+    //                                   ^
+    //         Will trigger re-composition if the state changes
 
-     when(loginState) {
-         is LoggedOut -> // ...
-         is LoggingIn -> // ...
-         is LoggedIn -> // ...
-     }
- }
+    when (loginState) {
+        is LoggedOut -> ShowLoginScreen()
+        is LoggingIn -> ShowLoginSpinner()
+        is LoggedIn -> ShowMainScreen()
+        null -> Unit
+    }
+}
  ```
 
 ___
