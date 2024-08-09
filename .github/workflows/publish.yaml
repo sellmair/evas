@@ -22,7 +22,7 @@ jobs:
           cache-disabled: 'true'
 
       - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
+        run: ./gradlew assemble --no-daemon --stacktrace
 
       - name: Publish to Maven Central
         run: ./gradlew publishAllPublicationsToMavenCentralRepository  --no-daemon --no-configuration-cache -i -s
