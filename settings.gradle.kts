@@ -32,6 +32,7 @@ Declare subprojects
  */
 include(":evas")
 include(":evas-compose")
+include(":snippets")
 include(":samples:joke-app")
 include(":samples:login-screen")
 include(":samples:directory-statistics-cli")

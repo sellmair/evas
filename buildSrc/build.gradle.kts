@@ -40,3 +40,8 @@ gradlePlugin.plugins.create("evas-publish") {
     id = "evas-publish"
     implementationClass = "EvasPublishPlugin"
 }
+
+gradlePlugin.plugins.create("evas-snippets") {
+    id = "evas-snippets"
+    implementationClass = "EvasSnippetsPlugin"
+}

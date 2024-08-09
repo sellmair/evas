@@ -26,7 +26,7 @@ internal fun Project.kotlinMultiplatformConventions() {
              */
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             compilerOptions {
-                if (!project.path.startsWith(":samples")) {
+                if (!project.path.startsWith(":samples") && !project.path.startsWith(":snippets")) {
                     explicitApi()
                 }
             }

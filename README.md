@@ -38,7 +38,7 @@ Instances of the `Events` (Event Bus) and `States`(State Container) can simply b
 ### Coroutines Context
 Binding them to the current coroutine context is as simple as
 
-[snippet]: (snippets/src/commonMain/kotlin/setup-coroutines.kt)
+[snippet]: (setup-coroutines.kt)
 ```kotlin
 val events = Events() // <- create new instance
 val states = States() // <- create new instance
@@ -50,7 +50,7 @@ withContext(events + states) {
 ### Composition Local (compose extension)
 Binding the event bus or state container to compose is as simple as
 
-[snippet]: (snippets/src/commonMain/kotlin/setup-compose.kt)
+[snippet]: (setup-compose.kt)
 ```kotlin
 val events = Events() // <- create new instance
 val states = States() // <- create new instance
