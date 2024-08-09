@@ -1,12 +1,12 @@
 @file:Suppress("unused")
 
-import io.sellmair.evas.flow
+import io.sellmair.evas.collect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 //Start
 fun CoroutineScope.launchClickCounterPrinter() = launch {
-    ClickCounterState.flow().collect { state ->
+    ClickCounterState.collect { state ->
         println("Click Count: ${state.count}")
     }
 }

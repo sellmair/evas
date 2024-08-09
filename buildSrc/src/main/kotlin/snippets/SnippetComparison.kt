@@ -30,7 +30,8 @@ internal fun findSnippets(
     text.lines().forEachIndexed { docLineIndex, docLine ->
         val sampleMatch = sampleRegex.find(docLine) ?: return@forEachIndexed
         val docNextLine = docLines.getOrNull(docLineIndex + 1) ?: return@forEachIndexed
-        if (!docNextLine.trim().startsWith("```kotlin")) return@forEachIndexed
+        if (!docNextLine.trim().startsWith("```kotlin"))
+            error("e: file://$doc:${docLineIndex +1} Missing ```kotlin after [snippet]")
 
         val docEndLineIndex = endIndices.firstOrNull { endIndex -> endIndex > docLineIndex + 1 }
             ?: return@forEachIndexed

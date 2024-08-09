@@ -55,7 +55,6 @@ Instances of the `Events` (Event Bus) and `States`(State Container) can simply b
 Binding them to the current coroutine context is as simple as
 
 [snippet]: (setup-coroutines.kt)
-
 ```kotlin
 val events = Events() // <- create new instance
 val states = States() // <- create new instance
@@ -69,7 +68,6 @@ withContext(events + states) {
 Binding the event bus or state container to compose is as simple as
 
 [snippet]: (setup-compose.kt)
-
 ```kotlin
 val events = Events() // <- create new instance
 val states = States() // <- create new instance
@@ -97,11 +95,10 @@ Note: The `emit()` function will suspend until all listening coroutines finished
 (See `emitAsync()` to dispatch events wihout waiting for all listeners.
 
 [snippet]: (loginEvents.kt)
-
 ```kotlin
-object LogoutEvent : Event
+object LogoutEvent: Event
 
-data class LoginEvent(val userName: String, val token: String) : Event
+data class LoginEvent(val userName: String, val token: String): Event
 
 suspend fun listenForLogout() = collectEvents<LogoutEvent> {
     println("User logged out")
@@ -114,9 +111,9 @@ suspend fun listenForLogin() = collectEvents<LoginEvent> { event ->
 suspend fun login(userName: String, password: String) {
     val token = httpClient().login(userName, password) ?: return
     LoginEvent(userName, token).emit()
-    //          ^
-    // Actually emit the event and suspend until
-    // All listeners have finished processing this event
+                    //          ^
+                    // Actually emit the event and suspend until
+                    // All listeners have finished processing this event
 }
 
 suspend fun logout() {
@@ -131,8 +128,8 @@ suspend fun logout() {
 ## Simple State
 
 Defining a simple State counting the number of 'clicks' performed by a user
-[snippet]: (simpleClickCounterState.kt)
 
+[snippet]: (simpleClickCounterState.kt)
 ```kotlin
 data class ClickCounterState(val count: Int) : State {
     /*
@@ -162,10 +159,9 @@ suspend fun onClick() {
 
 Using this state and print updates to the console
 [snippet]: (usingClickCounterState.kt)
-
 ```kotlin
 fun CoroutineScope.launchClickCounterPrinter() = launch {
-    ClickCounterState.flow().collect { state ->
+    ClickCounterState.collect { state ->
         println("Click Count: ${state.count}")
     }
 }
@@ -213,7 +209,6 @@ fun CoroutineScope.launchUserLoginState() = launchState(UserLoginState) {
 ### Use State in UI development (e.g., compose, using `io.sellmair:evas-compose`)
 
 [snippet]: (composeValue.kt)
-
  ```kotlin
 @Composable
 fun App() {
