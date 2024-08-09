@@ -28,7 +28,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build with Gradle
-        run: ./gradlew publishAllPublicationsToMavenCentralRepository publish --no-daemon --no-configuration-cache -i -s
+        run:
+          echo $ORG_GRADLE_PROJECT_signingInMemoryKeyId
+          ./gradlew publishAllPublicationsToMavenCentralRepository publish --no-daemon --no-configuration-cache -i -s
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
