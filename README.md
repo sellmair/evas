@@ -30,6 +30,39 @@ implementation("io.sellmair:evas-compose:1.0.0-beta01")
 ---
 
 # Simple Usage
+
+## Setup
+Instances of the `Events` (Event Bus) and `States`(State Container) can simply be created using the
+`Events()` and `States()` factory functions. 
+
+### Coroutines Context
+Binding them to the current coroutine context is as simple as
+
+[snippet]: (snippets/src/commonMain/kotlin/setup-coroutines.kt)
+```kotlin
+val events = Events() // <- create new instance
+val states = States() // <- create new instance
+withContext(events + states) {
+
+}
+```
+
+### Composition Local (compose extension)
+Binding the event bus or state container to compose is as simple as
+
+[snippet]: (snippets/src/commonMain/kotlin/setup-compose.kt)
+```kotlin
+val events = Events() // <- create new instance
+val states = States() // <- create new instance
+
+@Composable
+fun App() {
+    installEvas(events, states) {
+        MainPage()
+    }
+}
+```
+
 ## Send and Subscribe to Events
 ```kotlin
 object LogoutEvent: Event
@@ -64,8 +97,8 @@ suspend fun logout() {
  ```kotlin
  // Define the state
  sealed class UserLoginState: State {
-     companion object Key<UserLoginState>: State.Key {
-         val default = LoggedOut
+     companion object Key: State.Key<UserLoginState> {
+         override val default = LoggedOut
      }
 
      data object LoggedOut: UserLoginState()
