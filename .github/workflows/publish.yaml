@@ -21,6 +21,9 @@ jobs:
         with:
           cache-disabled: 'true'
 
+      - name: Publish Locally
+        run: ./gradlew publishAllPublicationsToLocalRepository --no-daemon --stacktrace
+
       - name: Publish to Maven Central
         run: ./gradlew publishAllPublicationsToMavenCentralRepository  --no-daemon --no-configuration-cache -i -s
         env:
