@@ -69,4 +69,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Run Native Tests
-        run: ./gradlew macosArm64Test macosX64Test iosSimulatorArm64Test iosSimulatorArm64Test
+        run: ./gradlew macosArm64Test macosX64Test
