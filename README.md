@@ -32,13 +32,13 @@ ___
 ## Dependencies
 
 ```kotlin
-implementation("io.sellmair:evas:1.0.0-beta01")
+implementation("io.sellmair:evas:1.0.0-beta02")
 ```
 
 (Compose Extensions)
 
 ```kotlin
-implementation("io.sellmair:evas-compose:1.0.0-beta01")
+implementation("io.sellmair:evas-compose:1.0.0-beta02")
 ```
 
 ---
