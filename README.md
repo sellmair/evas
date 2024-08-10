@@ -14,8 +14,9 @@ Evas is a **library** providing
 
 Discussions about architecture are fun, but at its core usually evolve around answering the following questions
 
-1) Where does my 'State' live?<br>
-2) How to pass 'Events' around?<br>
+1. Where does my 'State' live?
+2. How to pass 'Events' around?
+3. How are Events and States connected?
 
 ___ 
 
