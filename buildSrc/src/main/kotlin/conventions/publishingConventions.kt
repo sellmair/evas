@@ -24,8 +24,13 @@ internal fun Project.publishingConventions() {
                 maven("https://maven.pkg.github.com/sellmair/evas") {
                     name = "github"
                     credentials {
-                        username = providers.gradleProperty("evas.github.user").orNull
-                        password = providers.gradleProperty("evas.github.token").orNull
+                        username = providers.gradleProperty("evasGithubUser").orElse(
+                            providers.gradleProperty("evas.github.user")
+                        ).orNull
+
+                        password = providers.gradleProperty("evasGithubToken").orElse(
+                            providers.gradleProperty("evas.github.token")
+                        ).orNull
                     }
                 }
             }
