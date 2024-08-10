@@ -147,15 +147,23 @@ Defining a simple State counting the number of 'clicks' performed by a user
 
 [snippet]: (simpleClickCounterState.kt)
 ```kotlin
+/**
+ * Pretend: Our application cares about the number of 'clicks' the user has performed.
+ * We define our [ClickCounterState] here which holds this information.
+ */
 data class ClickCounterState(val count: Int) : State {
     /*
-    Using the 'companion object' as Key, defining '0' as default state
+    Using the 'companion object' as Key, defining '0' as the default state
      */
     companion object Key : State.Key<ClickCounterState> {
         override val default: ClickCounterState = ClickCounterState(count = 0)
     }
 }
 
+/**
+ * Launching the coroutine, which will produce the [ClickCounterState].
+ * It will collect the [ClickEvent]s and update the [ClickCounterState] by incrementing for each click it receives.
+ */
 fun CoroutineScope.launchClickCounterState() = launchState(ClickCounterState) {
     var count = 0
     collectEvents<ClickEvent> {
@@ -166,6 +174,9 @@ fun CoroutineScope.launchClickCounterState() = launchState(ClickCounterState) {
     }
 }
 
+/**
+ * Imaginary 'onClick' method which will send the [ClickEvent] to the application
+ */
 suspend fun onClick() {
     ClickEvent.emit()
     //          ^
