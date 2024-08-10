@@ -41,6 +41,7 @@ implementation("io.sellmair:evas:1.0.0-beta02")
 implementation("io.sellmair:evas-compose:1.0.0-beta02")
 ```
 
+
 ---
 
 # Simple Usage
@@ -92,7 +93,7 @@ can be done usinge the `collectEvents` method.
 
 Firing an event can simply be done by calling `emit`:
 Note: The `emit()` function will suspend until all listening coroutines finished processing.
-(See `emitAsync()` to dispatch events wihout waiting for all listeners.
+(See `emitAsync()` to dispatch events without waiting for all listeners.
 
 [snippet]: (loginEvents.kt)
 ```kotlin
