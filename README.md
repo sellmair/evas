@@ -9,8 +9,8 @@ alt="Evas logo by Sebastian Sellmair">
 
 Evas is a **library** providing
 
-- `Events`: A performant / scalable EventBus integrated with coroutines (and compose)
-- `States`: A pragmatic container for 'States' of your application
+- `Events`: A performant, scalable and most importantly **scoped** Event-Channel integrated with coroutines (and compose)
+- `States`: A pragmatic and **scoped** container for 'States' of your application
 
 Discussions about architecture are fun, but at its core usually evolve around answering the following questions
 
