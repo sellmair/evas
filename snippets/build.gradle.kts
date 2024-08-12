@@ -26,5 +26,13 @@ kotlin {
         implementation(compose.runtime)
         implementation(deps.coroutines.core)
     }
+
+    targets.configureEach {
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                finalizedBy(tasks.updateSnippets)
+            }
+        }
+    }
 }
 
