@@ -9,14 +9,20 @@ alt="Evas logo by Sebastian Sellmair">
 
 Evas is a **library** providing
 
-- `Events`: A performant, scalable and most importantly **scoped** Event-Channel integrated with coroutines (and compose)
-- `States`: A pragmatic and **scoped** container for 'States' of your application
+## `Events`
+A performant, scalable and most importantly **scoped** Event-Channel integrated with coroutines (and compose), which
+offers advantages like a traditional "Event Bus" (such as flexibility, decoupling, simplicity), whilst retaining
+structured concurrency, clear scoping, and easy testing.
+
+## `States`
+A pragmatic state container, offering the accessibility and ease of use of a Singleton, whilst also retaining clearly
+structured concurrency, scoping, and easy testing.
 
 Discussions about architecture are fun, but at its core usually evolve around answering the following questions
 
-1. Where does my 'State' live?
-2. How to pass 'Events' around?
-3. How are Events and States connected?
+1. Where does my 'State' live? -> `States`
+2. How to pass 'Events' around? -> `Events`
+3. How are Events and States connected? -> `kotlinx.coroutines`
 
 ___ 
 
