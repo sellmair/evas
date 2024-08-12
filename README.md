@@ -18,6 +18,7 @@ structured concurrency, clear scoping, and easy testing.
 A pragmatic state container, offering the accessibility and ease of use of a Singleton, whilst also retaining clearly
 structured concurrency, scoping, and easy testing.
 
+---
 Discussions about architecture are fun, but at its core usually evolve around answering the following questions
 
 1. Where does my 'State' live? -> `States`
