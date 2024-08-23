@@ -22,7 +22,7 @@ jobs:
           cache-disabled: 'true'
 
       - name: Publish Locally
-        run: ./gradlew publishAllPublicationsToLocalRepository --no-daemon --stacktrace
+        run: ./gradlew publishAllPublicationsToLocalRepository --no-daemon --no-configuration-cache -i -s
         env:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
