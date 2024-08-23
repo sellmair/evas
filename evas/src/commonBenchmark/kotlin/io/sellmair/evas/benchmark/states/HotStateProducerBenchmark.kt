@@ -6,7 +6,6 @@ import io.sellmair.evas.*
 import io.sellmair.evas.State
 import kotlinx.benchmark.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.future.asCompletableFuture
 import kotlin.random.Random
 
 @BenchmarkMode(Mode.Throughput)
@@ -77,9 +76,11 @@ open class HotStateProducerBenchmark {
     CI (99.9%): [529915.753, 537963.087] (assumes normal distribution)
      */
     @Benchmark
-    fun updateStateUsingProducer(): Unit = coroutineScope.launchState(StateA, Dispatchers.Unconfined) {
-        StateA(id = random.nextInt()).emit()
-    }.job.asCompletableFuture().join()
+    fun updateStateUsingProducer(): Unit = runBlocking {
+        coroutineScope.launchState(StateA, Dispatchers.Unconfined) {
+            StateA(id = random.nextInt()).emit()
+        }.join()
+    }
 
     /*
     198582.539 ±(99.9%) 6930.709 ops/s [Average]

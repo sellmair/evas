@@ -34,7 +34,8 @@ open class SilentEventListenersBenchmark {
     data object EmittedEvent : Event
 
     @Setup
-    fun prepare(blackhole: Blackhole) {
+    fun prepare() {
+        val blackhole = CommonBlackhole()
         events = Events()
         coroutineScope = CoroutineScope(Dispatchers.Default + Job() + events)
 

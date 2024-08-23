@@ -71,17 +71,30 @@ kotlin {
 
 /* Configure Benchmarking */
 run {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    kotlin.applyDefaultHierarchyTemplate {
+        withSourceSetTree(KotlinSourceSetTree("benchmark"))
+    }
+
     kotlin.jvm().compilations.create("benchmark") {
         associateWith(kotlin.jvm().compilations.getByName("main"))
     }
 
-    kotlin.sourceSets.getByName("jvmBenchmark").dependencies {
+    kotlin.macosArm64().compilations.create("benchmark") {
+        /* Let's use 'associateWith' once kotlinx.benchmark also starts using this mechanism */
+        defaultSourceSet.dependencies {
+            implementation(project)
+        }
+    }
+
+    kotlin.sourceSets.getByName("commonBenchmark").dependencies {
         implementation(deps.kotlinxBenchmarkRuntime)
     }
 
     benchmark {
         targets {
             register("jvmBenchmark")
+            register("macosArm64Benchmark")
         }
 
         configurations {
