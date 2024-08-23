@@ -41,7 +41,7 @@ internal fun Project.kotlinMultiplatformConventions() {
             }
             testLogging {
                 showStandardStreams = true
-                events = setOf(TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+                events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
             }
         }
     }
