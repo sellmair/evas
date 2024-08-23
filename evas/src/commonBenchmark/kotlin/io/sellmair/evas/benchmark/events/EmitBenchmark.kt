@@ -1,8 +1,11 @@
+@file:OptIn(KotlinxBenchmarkRuntimeInternalApi::class)
+
 package io.sellmair.evas.benchmark.events
 
 import io.sellmair.evas.*
 import kotlinx.benchmark.*
 import kotlinx.benchmark.State
+import kotlinx.benchmark.internal.KotlinxBenchmarkRuntimeInternalApi
 import kotlinx.coroutines.*
 
 @BenchmarkMode(Mode.Throughput)
@@ -20,7 +23,8 @@ open class EmitBenchmark {
     var eventsEmitted: Int = 0
 
     @Setup
-    fun prepare(blackhole: Blackhole) {
+    fun prepare() {
+        val blackhole = CommonBlackhole()
         events = Events()
         coroutineScope = CoroutineScope(Dispatchers.Unconfined + Job() + events)
 
@@ -32,25 +36,6 @@ open class EmitBenchmark {
     @TearDown
     fun teardown() {
         coroutineScope.cancel()
-    }
-
-
-    /**
-     * 100:
-     * 34884.971 ±(99.9%) 94.687 ops/s [Average]
-     *   (min, avg, max) = (34636.933, 34884.971, 35054.948), stdev = 109.042
-     *   CI (99.9%): [34790.283, 34979.658] (assumes normal distribution)
-     *
-     * 1000:
-     * 3707.745 ±(99.9%) 8.332 ops/s [Average]
-     *   (min, avg, max) = (3692.066, 3707.745, 3727.593), stdev = 9.595
-     *   CI (99.9%): [3699.414, 3716.077] (assumes normal distribution)
-     */
-    @Benchmark
-    fun emitEvents() = runBlocking(events) {
-        repeat(eventsEmitted) {
-            EmittedEvent.emit()
-        }
     }
 
     /**
@@ -71,6 +56,24 @@ open class EmitBenchmark {
     fun emitAsyncEvents(blackhole: Blackhole) {
         repeat(eventsEmitted) {
             events.emitAsync(EmittedEvent)
+        }
+    }
+
+    /**
+     * 100:
+     * 34884.971 ±(99.9%) 94.687 ops/s [Average]
+     *   (min, avg, max) = (34636.933, 34884.971, 35054.948), stdev = 109.042
+     *   CI (99.9%): [34790.283, 34979.658] (assumes normal distribution)
+     *
+     * 1000:
+     * 3707.745 ±(99.9%) 8.332 ops/s [Average]
+     *   (min, avg, max) = (3692.066, 3707.745, 3727.593), stdev = 9.595
+     *   CI (99.9%): [3699.414, 3716.077] (assumes normal distribution)
+     */
+    @Benchmark
+    fun emitEvents() = runBlocking(events) {
+        repeat(eventsEmitted) {
+            EmittedEvent.emit()
         }
     }
 }
