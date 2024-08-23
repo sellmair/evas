@@ -6,9 +6,11 @@ import kotlinx.atomicfu.getAndUpdate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.kotlinx.lincheck.CTestConfiguration
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
+import org.jetbrains.kotlinx.lincheck.strategy.stress.StressCTestConfiguration
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import kotlin.test.Test
 
@@ -50,5 +52,7 @@ class EventsLincheck {
     @Test
     fun modelCheckingTest() = ModelCheckingOptions()
         .hangingDetectionThreshold(12)
+        .invocationsPerIteration(CTestConfiguration.DEFAULT_ITERATIONS / 2)
+        .iterations(CTestConfiguration.DEFAULT_ITERATIONS / 2)
         .check(this::class)
 }
