@@ -2,8 +2,10 @@ import io.sellmair.evas.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.kotlinx.lincheck.CTestConfiguration
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
+import org.jetbrains.kotlinx.lincheck.strategy.stress.StressCTestConfiguration
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import kotlin.test.Test
 
@@ -61,6 +63,8 @@ class StatesLincheck {
 
     @Test
     fun stressTest() = StressOptions()
+        .invocationsPerIteration(StressCTestConfiguration.DEFAULT_INVOCATIONS / 4)
+        .iterations(CTestConfiguration.DEFAULT_ITERATIONS / 4)
         .check(this::class)
 
 }
