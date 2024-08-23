@@ -1,4 +1,5 @@
 import io.sellmair.evas.AtomicSnapshotList
+import org.jetbrains.kotlinx.lincheck.CTestConfiguration
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
@@ -28,6 +29,7 @@ class AtomicSnapshotTest {
 
     @Test
     fun modelCheckingTest() = ModelCheckingOptions()
-        .hangingDetectionThreshold(12)
+        .invocationsPerIteration(CTestConfiguration.DEFAULT_ITERATIONS / 2)
+        .iterations(CTestConfiguration.DEFAULT_ITERATIONS / 2)
         .check(this::class)
 }
