@@ -37,7 +37,6 @@ internal fun Project.kotlinMultiplatformConventions() {
             outputs.upToDateWhen { false }
             if (this is Test) {
                 maxHeapSize = "4G"
-                maxParallelForks = 12
             }
             testLogging {
                 showStandardStreams = true
