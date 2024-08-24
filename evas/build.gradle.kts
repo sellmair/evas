@@ -78,9 +78,13 @@ run {
 
     kotlin.jvm().compilations.create("benchmark") {
         associateWith(kotlin.jvm().compilations.getByName("main"))
+        defaultSourceSet.dependencies {
+            implementation("org.greenrobot:eventbus-java:3.3.1")
+        }
     }
 
     kotlin.macosArm64().compilations.create("benchmark") {
+        associateWith(kotlin.macosArm64().compilations.getByName("main"))
         /* Let's use 'associateWith' once kotlinx.benchmark also starts using this mechanism */
         defaultSourceSet.dependencies {
             implementation(project)
@@ -108,6 +112,10 @@ run {
 
             register("states") {
                 include(".*\\.states\\..*")
+            }
+
+            register("compare") {
+                include(".*DifferentLibraryComparisonBenchmark.*")
             }
         }
     }
