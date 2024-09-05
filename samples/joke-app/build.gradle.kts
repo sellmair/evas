@@ -43,7 +43,7 @@ kotlin {
     }
 
     sourceSets.androidMain.dependencies {
-        implementation("androidx.activity:activity-compose:1.9.0")
+        implementation("androidx.activity:activity-compose:1.9.2")
         implementation("androidx.appcompat:appcompat:1.7.0")
         implementation("androidx.core:core-ktx:1.13.1")
         implementation("io.ktor:ktor-client-cio:$ktorClientVersion")
@@ -53,7 +53,6 @@ kotlin {
         implementation(compose.desktop.currentOs)
         implementation(deps.ktorClientCio)
         implementation(deps.coroutines.swing)
-
     }
 
     sourceSets.appleMain.dependencies {
