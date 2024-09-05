@@ -212,7 +212,7 @@ internal class StatesImpl : States {
     }
 
     override fun <T : State?> getState(key: Key<T>): StateFlow<T> {
-        return getOrCreateMutableStateFlow(key).asStateFlow()
+        return getOrCreateMutableStateFlow(key)
     }
 
     internal fun <T : State?> getMutableState(key: Key<T>): MutableStateFlow<T> {

@@ -1,3 +1,5 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.compose")
@@ -25,6 +27,18 @@ kotlin {
         implementation(project(":evas"))
         implementation(compose.runtime)
         implementation(deps.coroutines.core)
+    }
+
+    sourceSets.jvmTest.dependencies {
+        implementation(kotlin("test"))
+        implementation(kotlin("test-annotations-common"))
+
+        implementation(compose.material)
+        implementation(compose.ui)
+        @OptIn(ExperimentalComposeLibrary::class)
+        implementation(compose.uiTest)
+        implementation(compose.foundation)
+        implementation(compose.desktop.currentOs)
     }
 }
 
