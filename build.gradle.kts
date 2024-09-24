@@ -1,7 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-
-
 plugins {
     kotlin("multiplatform") apply false
 }
@@ -9,4 +7,3 @@ plugins {
 tasks.register<Delete>("clean") {
     delete(file("build"))
 }
-
