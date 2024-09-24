@@ -102,6 +102,10 @@ run {
         }
 
         configurations {
+            register("atomicSnapshot") {
+                include(".*AtomicSnapshotBenchmark.*")
+            }
+
             register("emit") {
                 include(".*EmitBenchmark.*")
             }
