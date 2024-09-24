@@ -312,8 +312,7 @@ Implementation!
 internal class EventsImpl : Events {
     private val unconfinedScope = CoroutineScope(Dispatchers.Unconfined)
 
-    internal val typedChannels =
-        AtomicSnapshotMap<KClass<*>, AtomicSnapshot<MutableList<Channel<Dispatch<*>>>, List<Channel<Dispatch<*>>>>>()
+    internal val typedChannels = AtomicSnapshotMap<KClass<*>, AtomicSnapshot<MutableList<Channel<Dispatch<*>>>, List<Channel<Dispatch<*>>>>>()
 
     internal class Dispatch<out T>(val event: T, val job: CompletableJob?)
 
