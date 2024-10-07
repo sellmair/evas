@@ -97,10 +97,13 @@ public final class io/sellmair/evas/StateProducerStarted$Companion {
 
 public abstract interface class io/sellmair/evas/States : kotlin/coroutines/CoroutineContext$Element {
 	public static final field Key Lio/sellmair/evas/States$Key;
+	public abstract fun getAndUpdateState (Lio/sellmair/evas/State$Key;Lkotlin/jvm/functions/Function1;)Lio/sellmair/evas/State;
 	public abstract fun getKey ()Lkotlin/coroutines/CoroutineContext$Key;
 	public abstract fun getState (Lio/sellmair/evas/State$Key;)Lkotlinx/coroutines/flow/StateFlow;
 	public abstract fun setState (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;)V
 	public abstract fun setState (Lio/sellmair/evas/State$Key;Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun updateAndGetState (Lio/sellmair/evas/State$Key;Lkotlin/jvm/functions/Function1;)Lio/sellmair/evas/State;
+	public abstract fun updateState (Lio/sellmair/evas/State$Key;Lkotlin/jvm/functions/Function1;)Lio/sellmair/evas/States$Update;
 }
 
 public final class io/sellmair/evas/States$DefaultImpls {
@@ -114,13 +117,24 @@ public final class io/sellmair/evas/States$DefaultImpls {
 public final class io/sellmair/evas/States$Key : kotlin/coroutines/CoroutineContext$Key {
 }
 
+public final class io/sellmair/evas/States$Update {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPrevious ()Ljava/lang/Object;
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/sellmair/evas/StatesKt {
 	public static final fun States ()Lio/sellmair/evas/States;
 	public static final fun collect (Lio/sellmair/evas/State$Key;Lkotlinx/coroutines/flow/FlowCollector;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun flow (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getAndUpdate (Lio/sellmair/evas/State$Key;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun getStatesOrNull (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
 	public static final fun getStatesOrThrow (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/States;
 	public static final fun set (Lio/sellmair/evas/State$Key;Lio/sellmair/evas/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun update (Lio/sellmair/evas/State$Key;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun updateAndGet (Lio/sellmair/evas/State$Key;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun value (Lio/sellmair/evas/State$Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

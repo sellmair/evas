@@ -42,6 +42,15 @@ class StatesLincheck {
     fun getStateB() = states.getState(StateB).value
 
     @Operation
+    fun getAndIncrementStateA() = states.getAndUpdateState(StateA) { state -> state?.copy(value = state.value + 1) }
+
+    @Operation
+    fun incrementAndGetStateA() = states.updateAndGetState(StateA) { state -> state?.copy(value = state.value + 1) }
+
+    @Operation
+    fun incrementStateA(value: Int) = states.updateState(StateA) { state -> state?.copy(value = state.value + value) }
+
+    @Operation
     fun registerProducer() = (states as StatesImpl).registerProducer(coldAProducer)
 
     @Operation

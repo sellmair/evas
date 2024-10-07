@@ -101,12 +101,58 @@ public fun States(): States = StatesImpl()
 public sealed interface States : CoroutineContext.Element {
     override val key: CoroutineContext.Key<*> get() = Key
 
+    public class Update<out T> internal constructor(public val previous: T, public val value: T) {
+
+        override fun equals(other: Any?): Boolean {
+            if (other === this) return true
+            if (other !is Update<*>) return false
+            if (other.previous != previous) return false
+            if (other.value != value) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return 13 + previous.hashCode() * 31 + value.hashCode()
+        }
+
+        override fun toString(): String {
+            return "Update(previous=$previous, value=$value)"
+        }
+    }
+
     /**
      * Immediately sets the state for the given [key]. All state listeners will be notified.
      * This API is especially useful when writing tests.
      * For most production use cases [launchState] is more suitable.
      */
     public fun <T : State?> setState(key: State.Key<T>, value: T)
+
+    /**
+     * Updates the state atomically:
+     * ⚠️ Note: If the state is congested, then [update] function can be called several times, see
+     * [MutableStateFlow.update]
+     *
+     * @return An update containing the previous state and the new updated value.
+     */
+    public fun <T : State?> updateState(key: State.Key<T>, update: (T) -> T): Update<T>
+
+    /**
+     * Updates the state atomically:
+     * ⚠️Note: If the state is congested (many update requests in parallel), then the [update] function
+     * might be called several times, see [MutableStateFlow.update]
+     *
+     * @return the previous state, which was used to create the new state
+     */
+    public fun <T : State?> getAndUpdateState(key: State.Key<T>, update: (T) -> T): T
+
+    /**
+     * Updates the state atomically:
+     * ⚠️: If the state is congested (many update requests in parallel), then the [update] function
+     * might be called several times, see [MutableStateFlow.update]
+     *
+     * @return The new state after the update finished
+     */
+    public fun <T : State?> updateAndGetState(key: State.Key<T>, update: (T) -> T): T
 
     /**
      * Will return the state associated by the given [key] as [StateFlow].
@@ -171,6 +217,31 @@ public suspend fun <T : State?> Key<T>.set(value: T) {
     return coroutineContext.statesOrThrow.setState(this, value)
 }
 
+/**
+ * See [States.updateState]
+ * @throws MissingStatesException if there is no [States] instance installed in the current corotuine context
+ */
+public suspend fun <T : State?> Key<T>.update(update: (T) -> T): States.Update<T> {
+    return coroutineContext.statesOrThrow.updateState(this, update)
+}
+
+
+/**
+ * See [States.updateAndGetState]
+ * @throws MissingStatesException if there is no [States] instance installed in the current corotuine context
+ */
+public suspend fun <T : State?> Key<T>.updateAndGet(update: (T) -> T): T{
+    return coroutineContext.statesOrThrow.updateAndGetState(this, update)
+}
+
+/**
+ * See [States.getAndUpdateState]
+ * @throws MissingStatesException if there is no [States] instance installed in the current corotuine context
+ */
+public suspend fun <T : State?> Key<T>.getAndUpdate(update: (T) -> T): T{
+    return coroutineContext.statesOrThrow.getAndUpdateState(this, update)
+}
+
 internal val States.internal: StatesImpl
     get() = when (this) {
         is StatesImpl -> this
@@ -215,12 +286,31 @@ internal class StatesImpl : States {
         return getOrCreateMutableStateFlow(key)
     }
 
+    override fun <T : State?> updateState(key: Key<T>, update: (T) -> T): States.Update<T> {
+        val state = getOrCreateMutableStateFlow(key)
+        while (true) {
+            val previous = state.value
+            val next = update(previous)
+            if (state.compareAndSet(previous, next)) {
+                return States.Update(previous = previous, value = next)
+            }
+        }
+    }
+
+    override fun <T : State?> updateAndGetState(key: Key<T>, update: (T) -> T): T {
+        return getOrCreateMutableStateFlow(key).updateAndGet(update)
+    }
+
+    override fun <T : State?> getAndUpdateState(key: Key<T>, update: (T) -> T): T {
+        return getOrCreateMutableStateFlow(key).getAndUpdate(update)
+    }
+
     internal fun <T : State?> getMutableState(key: Key<T>): MutableStateFlow<T> {
         return getOrCreateMutableStateFlow(key)
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T : State?> getOrCreateMutableStateFlow(key: Key<T>): MutableStateFlow<T>  {
+    private fun <T : State?> getOrCreateMutableStateFlow(key: Key<T>): MutableStateFlow<T> {
         /* fast path: No locking required, flow is already available */
         states[key]?.let { return it as MutableStateFlow<T> }
 
