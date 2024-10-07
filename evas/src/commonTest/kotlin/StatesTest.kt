@@ -202,9 +202,9 @@ class StatesTest {
         var isSubscribed = false
 
         val stateProducerJob = launchState(HotState, StandardTestDispatcher(testScheduler), StateProducerStarted.Lazily) {
-            assertTrue(isSubscribed, "Expected state producer to only be launched after at least one subscription")
-            HotState(42).emit()
-        }
+                assertTrue(isSubscribed, "Expected state producer to only be launched after at least one subscription")
+                HotState(42).emit()
+            }
         testScheduler.advanceUntilIdle()
         assertEquals(
             null, HotState.flow().value,
@@ -215,5 +215,34 @@ class StatesTest {
         isSubscribed = true
         assertEquals(HotState(42), HotState.flow().filterNotNull().first())
         assertTrue(stateProducerJob.isCompleted, "Expected job to be completed")
+    }
+
+
+    @Test
+    fun `test - update`() = runTest(States()) {
+        assertEquals(States.Update(null, HotState(1)), HotState.update { HotState(1) })
+
+        assertEquals(
+            States.Update(HotState(1), HotState(2)),
+            HotState.update { state -> state?.copy(id = (state.id as Int).inc()) })
+
+        assertEquals(
+            States.Update(HotState(2), null),
+            HotState.update { null }
+        )
+    }
+
+    @Test
+    fun `test - getAndUpdate`() = runTest(States()) {
+        assertEquals(null, HotState.getAndUpdate { HotState(1) })
+        assertEquals(HotState(1), HotState.getAndUpdate { HotState(it!!.id as Int + 1) })
+        assertEquals(HotState(2), HotState.getAndUpdate { null })
+        assertNull(HotState.getAndUpdate { null })
+    }
+
+    @Test
+    fun `test - updateAndGet`() = runTest(States()) {
+        assertEquals(HotState(1), HotState.updateAndGet { HotState(1) })
+        assertEquals(HotState(2), HotState.updateAndGet { it!!.copy(id = (it.id as Int).inc()) })
     }
 }
