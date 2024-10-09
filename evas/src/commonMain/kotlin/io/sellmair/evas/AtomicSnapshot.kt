@@ -7,7 +7,7 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.loop
 import kotlin.concurrent.Volatile
 
-internal fun <T> AtomicSnapshotList(initial: MutableList<T> = mutableListOf()): AtomicSnapshot<MutableList<T>, List<T>> =
+internal fun <T> AtomicSnapshotList(initial: MutableCollection<T> = mutableListOf()): AtomicSnapshot<MutableCollection<T>, List<T>> =
     AtomicSnapshot(initial, { it.toList() })
 
 internal fun <K, V> AtomicSnapshotMap(initial: MutableMap<K, V> = mutableMapOf()): AtomicSnapshot<MutableMap<K, V>, Map<K, V>> =

@@ -312,7 +312,7 @@ Implementation!
 internal class EventsImpl : Events {
     private val unconfinedScope = CoroutineScope(Dispatchers.Unconfined)
 
-    internal val typedChannels = AtomicSnapshotMap<KClass<*>, AtomicSnapshot<MutableList<Channel<Dispatch<*>>>, List<Channel<Dispatch<*>>>>>()
+    internal val typedChannels = AtomicSnapshotMap<KClass<*>, AtomicSnapshot<MutableCollection<Channel<Dispatch<*>>>, List<Channel<Dispatch<*>>>>>()
 
     internal class Dispatch<out T>(val event: T, val job: CompletableJob?)
 
@@ -322,7 +322,7 @@ internal class EventsImpl : Events {
 
             /* Register Channel in this even bus */
             typedChannels.write { mutableTypedChannels ->
-                val channels = mutableTypedChannels.getOrPut(clazz) { AtomicSnapshotList() }
+                val channels = mutableTypedChannels.getOrPut(clazz) { AtomicSnapshotList(mutableSetOf()) }
 
                 channels.write { mutableChannels ->
                     @Suppress("UNCHECKED_CAST")
