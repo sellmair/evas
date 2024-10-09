@@ -40,7 +40,7 @@ ___
 ## Dependencies
 
 ```kotlin
-implementation("io.sellmair:evas:1.0.0")
+implementation("io.sellmair:evas:1.1.0")
 ```
 
 Maven:
@@ -48,14 +48,14 @@ Maven:
 <dependency>
     <groupId>io.sellmair</groupId>
     <artifactId>evas-jvm</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 (Compose Extensions)
 
 ```kotlin
-implementation("io.sellmair:evas-compose:1.0.0")
+implementation("io.sellmair:evas-compose:1.1.0")
 ```
 
 
