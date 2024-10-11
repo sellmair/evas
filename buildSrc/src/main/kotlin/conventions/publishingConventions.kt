@@ -17,10 +17,8 @@ internal fun Project.publishingConventions() {
                 maven(rootDir.resolve("build/repository")) {
                     name = "local"
                 }
-            }
 
-            /* Publish to GitHub packages */
-            repositories {
+                /* Publish to GitHub packages */
                 maven("https://maven.pkg.github.com/sellmair/evas") {
                     name = "github"
                     credentials {
@@ -31,6 +29,14 @@ internal fun Project.publishingConventions() {
                         password = providers.gradleProperty("evasGithubToken").orElse(
                             providers.gradleProperty("evas.github.token")
                         ).orNull
+                    }
+                }
+
+                maven("https://repo.sellmair.io") {
+                    name = "sellmair"
+                    credentials {
+                        username = providers.gradleProperty("repo.sellmair.user").orNull
+                        password = providers.gradleProperty("repo.sellmair.password").orNull
                     }
                 }
             }
