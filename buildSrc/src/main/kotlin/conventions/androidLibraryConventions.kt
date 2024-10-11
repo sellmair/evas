@@ -11,7 +11,7 @@ fun Project.androidLibraryConventions() {
             compileSdk = 34
             defaultConfig {
                 minSdk = 15
-                namespace = "io.sellmair.${project.name}"
+                namespace = "io.sellmair.${project.name.replace("-", ".")}"
             }
         }
 

@@ -32,6 +32,8 @@ Declare subprojects
  */
 include(":evas")
 include(":evas-compose")
+include(":evas-compose:gradle-plugin")
+
 include(":snippets")
 include(":samples:joke-app")
 include(":samples:login-screen")

@@ -5,6 +5,7 @@ plugins {
     kotlin("plugin.compose")
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
+    id("com.android.library")
     `evas-publish`
 }
 
@@ -12,6 +13,7 @@ description = "Compose (Multiplatform) extensions for evas"
 
 kotlin {
     jvm()
+    androidTarget()
 
     macosArm64()
     macosX64()
@@ -27,6 +29,10 @@ kotlin {
         implementation(project(":evas"))
         implementation(compose.runtime)
         implementation(deps.coroutines.core)
+    }
+
+    sourceSets.jvmMain.dependencies {
+        implementation(deps.slf4j.api)
     }
 
     sourceSets.jvmTest.dependencies {
