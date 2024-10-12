@@ -2,6 +2,13 @@ plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
     `maven-publish`
+    `evas-publish`
+}
+
+publishing {
+    publications.create<MavenPublication>("plugin") {
+        from(components["java"])
+    }
 }
 
 gradlePlugin {

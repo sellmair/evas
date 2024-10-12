@@ -1,5 +1,6 @@
 package conventions
 
+import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.KotlinMultiplatform
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
@@ -8,6 +9,8 @@ import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 internal fun Project.publishingConventions() {
     plugins.withType<MavenPublishPlugin>().configureEach {
@@ -47,8 +50,15 @@ internal fun Project.publishingConventions() {
     plugins.withType<com.vanniktech.maven.publish.MavenPublishPlugin>().all {
         extensions.configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
             publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
-            signAllPublications()
-            configure(KotlinMultiplatform(sourcesJar = true))
+            if (project.providers.gradleProperty("no-sign").orNull == null) {
+                signAllPublications()
+            }
+
+            if (project.kotlinExtension is KotlinMultiplatformExtension) {
+                configure(KotlinMultiplatform(sourcesJar = true))
+            } else {
+                configure(KotlinJvm(sourcesJar = true))
+            }
 
             pom {
                 name = "Evas"
