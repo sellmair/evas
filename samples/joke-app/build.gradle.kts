@@ -22,7 +22,6 @@ kotlin {
     iosSimulatorArm64()
 
     /* Dependencies */
-    val ktorClientVersion = "2.3.12"
     sourceSets.commonMain.dependencies {
         implementation(project(":evas"))
         implementation(project(":evas-compose"))
@@ -43,10 +42,10 @@ kotlin {
     }
 
     sourceSets.androidMain.dependencies {
-        implementation("androidx.activity:activity-compose:1.9.2")
+        implementation("androidx.activity:activity-compose:1.9.3")
         implementation("androidx.appcompat:appcompat:1.7.0")
-        implementation("androidx.core:core-ktx:1.13.1")
-        implementation("io.ktor:ktor-client-cio:$ktorClientVersion")
+        implementation("androidx.core:core-ktx:1.15.0")
+        implementation(deps.ktorClientCio)
     }
 
     sourceSets.jvmMain.dependencies {
@@ -62,7 +61,7 @@ kotlin {
 
 /* Android Options */
 android {
-    compileSdk = 34
+    compileSdk = 35
     namespace = "io.sellmair.jokes"
     defaultConfig {
         minSdk = 24
@@ -103,4 +102,3 @@ kotlin.targets.withType<KotlinNativeTarget>()
             isStatic = true
         }
     }
-

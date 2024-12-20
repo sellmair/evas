@@ -21,11 +21,36 @@ dependencies {
 
     /* JetBrains */
     implementation(kotlin("gradle-plugin:${deps.versions.kotlin.get()}"))
-    implementation("org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:${deps.versions.kotlin.get()}")
-    implementation("org.jetbrains.compose:org.jetbrains.compose.gradle.plugin:${deps.versions.compose.get()}")
-    implementation("org.jetbrains.kotlinx.atomicfu:org.jetbrains.kotlinx.atomicfu.gradle.plugin:0.25.0")
-    implementation("org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:0.16.2")
-    implementation("org.jetbrains.kotlinx.benchmark:org.jetbrains.kotlinx.benchmark.gradle.plugin:${deps.versions.kotlinxBenchmark.get()}")
+
+    implementation(
+        "org.jetbrains.kotlin.plugin.compose:" +
+                "org.jetbrains.kotlin.plugin.compose.gradle.plugin:" +
+                deps.versions.kotlin.get()
+    )
+
+    implementation(
+        "org.jetbrains.compose:" +
+                "org.jetbrains.compose.gradle.plugin:" +
+                deps.versions.compose.get()
+    )
+
+    implementation(
+        "org.jetbrains.kotlinx.atomicfu:" +
+                "org.jetbrains.kotlinx.atomicfu.gradle.plugin:" +
+                deps.versions.atomicFu.get()
+    )
+
+    implementation(
+        "org.jetbrains.kotlinx.binary-compatibility-validator:" +
+                "org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:" +
+                deps.versions.kotlinxBinaryCompatibilityValidator.get()
+    )
+
+    implementation(
+        "org.jetbrains.kotlinx.benchmark:" +
+                "org.jetbrains.kotlinx.benchmark.gradle.plugin:" +
+                deps.versions.kotlinxBenchmark.get()
+    )
 
     implementation("com.android.tools.build:gradle:${deps.versions.androidGradlePlugin.get()}")
     implementation("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.29.0")
