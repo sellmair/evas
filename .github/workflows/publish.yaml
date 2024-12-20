@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: corretto
-          java-version: 17
+          java-version: 21
           cache: 'gradle'
 
       - name: Setup Gradle
@@ -45,5 +45,3 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
-
-
