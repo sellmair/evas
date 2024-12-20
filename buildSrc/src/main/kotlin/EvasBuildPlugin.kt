@@ -1,4 +1,4 @@
-import conventions.androidLibraryConventions
+import conventions.androidConventions
 import conventions.binaryCompatibilityValidatorConventions
 import conventions.kotlinMultiplatformConventions
 import org.gradle.api.Plugin
@@ -10,7 +10,7 @@ class EvasBuildPlugin : Plugin<Project> {
         group = "io.sellmair"
 
         target.kotlinMultiplatformConventions()
-        target.androidLibraryConventions()
+        target.androidConventions()
         target.binaryCompatibilityValidatorConventions()
     }
 }
