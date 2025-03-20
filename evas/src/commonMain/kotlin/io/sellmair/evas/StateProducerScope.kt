@@ -5,7 +5,6 @@ import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlin.coroutines.CoroutineContext
-import kotlin.experimental.ExperimentalTypeInference
 import kotlin.jvm.JvmName
 
 public class StateProducerScope<T : State?> internal constructor(
@@ -32,8 +31,7 @@ public class StateProducerScope<T : State?> internal constructor(
     }
 }
 
-@OptIn(ExperimentalTypeInference::class)
-internal fun <T : State?> stateProducerFlow(@BuilderInference block: suspend StateProducerScope<T>.() -> Unit): Flow<T> {
+internal fun <T : State?> stateProducerFlow(block: suspend StateProducerScope<T>.() -> Unit): Flow<T> {
     return channelFlow {
         with(StateProducerScope(this)) {
             block()
