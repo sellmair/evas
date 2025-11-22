@@ -1,8 +1,7 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinMetadataTarget
 
 plugins {
     kotlin("multiplatform")
@@ -16,6 +15,11 @@ plugins {
 description = "Events and States Library for Kotlin (Multiplatform)"
 
 kotlin {
+    compilerOptions {
+        languageVersion.set(KotlinVersion.KOTLIN_2_1)
+        apiVersion.set(KotlinVersion.KOTLIN_2_1)
+    }
+
     jvm()
     androidTarget()
 
@@ -124,4 +128,3 @@ run {
         }
     }
 }
-
