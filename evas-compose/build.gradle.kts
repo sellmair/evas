@@ -1,4 +1,5 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     kotlin("multiplatform")
@@ -11,6 +12,11 @@ plugins {
 description = "Compose (Multiplatform) extensions for evas"
 
 kotlin {
+    compilerOptions {
+        languageVersion.set(KotlinVersion.KOTLIN_2_1)
+        apiVersion.set(KotlinVersion.KOTLIN_2_1)
+    }
+
     jvm()
 
     macosArm64()
@@ -41,4 +47,3 @@ kotlin {
         implementation(compose.desktop.currentOs)
     }
 }
-
