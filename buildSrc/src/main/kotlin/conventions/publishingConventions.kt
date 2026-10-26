@@ -40,7 +40,7 @@ internal fun Project.publishingConventions() {
     /* Publish to maven central */
     plugins.withType<com.vanniktech.maven.publish.MavenPublishPlugin>().all {
         extensions.configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
-            publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+            publishToMavenCentral()
             signAllPublications()
             configure(KotlinMultiplatform(sourcesJar = true))
 

@@ -53,7 +53,7 @@ dependencies {
     )
 
     implementation("com.android.tools.build:gradle:${deps.versions.androidGradlePlugin.get()}")
-    implementation("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.29.0")
+    implementation("com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin:0.37.0")
 }
 
 gradlePlugin.plugins.create("evas") {

@@ -31,7 +31,7 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         implementation(project(":evas"))
-        implementation(compose.runtime)
+        implementation(deps.composeRuntime)
         implementation(deps.coroutines.core)
     }
 

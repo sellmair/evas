@@ -9,14 +9,12 @@ kotlin {
     jvm()
 
     macosArm64()
-    macosX64()
 
     linuxX64()
     linuxArm64()
 
     iosSimulatorArm64()
     iosArm64()
-    iosX64()
 
     sourceSets.commonMain.get().kotlin.setSrcDirs(listOf(files("src")))
 

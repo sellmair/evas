@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
+import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 internal fun Project.kotlinMultiplatformConventions() {
@@ -36,6 +37,13 @@ internal fun Project.kotlinMultiplatformConventions() {
                 compilerOptions {
                     this.jvmTarget.set(JvmTarget.JVM_11)
                     this.freeCompilerArgs.add("-Xjdk-release=11")
+                }
+            }
+
+            /* Keep the JVM module name stable: It is part of the binary (mangled internal names, .kotlin_module) */
+            targets.withType<KotlinJvmTarget>().configureEach {
+                compilerOptions {
+                    moduleName.set(project.name)
                 }
             }
 

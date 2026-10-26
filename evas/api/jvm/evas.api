@@ -42,14 +42,6 @@ public final class io/sellmair/evas/EventsKt {
 	public static final fun getEventsOrThrow (Lkotlin/coroutines/CoroutineContext;)Lio/sellmair/evas/Events;
 }
 
-public final class io/sellmair/evas/EventsKt$sam$i$kotlinx_coroutines_flow_FlowCollector$0 : kotlin/jvm/internal/FunctionAdapter, kotlinx/coroutines/flow/FlowCollector {
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public final synthetic fun emit (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun equals (Ljava/lang/Object;)Z
-	public final fun getFunctionDelegate ()Lkotlin/Function;
-	public final fun hashCode ()I
-}
-
 public final class io/sellmair/evas/HotStateProducerKt {
 	public static final fun launchState (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
 	public static synthetic fun launchState$default (Lkotlinx/coroutines/CoroutineScope;Lio/sellmair/evas/State$Key;Lkotlin/coroutines/CoroutineContext;Lio/sellmair/evas/StateProducerStarted;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
