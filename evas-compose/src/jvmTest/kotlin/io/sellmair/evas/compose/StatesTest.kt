@@ -4,6 +4,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.sellmair.evas.State
 import io.sellmair.evas.States
 import io.sellmair.evas.launchState
