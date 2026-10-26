@@ -13,7 +13,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNull
 
-@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 class StatesCoroutinesTest {
 
     private lateinit var singleThreadDispatcher: ExecutorCoroutineDispatcher

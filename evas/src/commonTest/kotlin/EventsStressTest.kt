@@ -7,13 +7,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.minutes
 
-@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 class EventsStressTest {
 
     data class TestEvent(val coroutineId: Int, val eventId: Int) : Event
 
     @Test
-    fun `test - many events`() = runTest(Events()) {
+    fun testManyEvents() = runTest(Events()) {
         val receivedEvents = mutableListOf<TestEvent>()
 
         /* Collector started 'UNDISPATCHED' to not miss early emissions of coroutines started below. */
@@ -52,7 +51,7 @@ class EventsStressTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `stress test - emitAsync`() = runTest(Events(), timeout = 10.minutes) {
+    fun stressTestEmitAsync() = runTest(Events(), timeout = 10.minutes) {
         val receivedEvents = mutableListOf<TestEvent>()
 
         collectEventsAsync<TestEvent>(context = UnconfinedTestDispatcher(testScheduler)) {

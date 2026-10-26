@@ -1,5 +1,4 @@
 @file:OptIn(ExperimentalCoroutinesApi::class)
-@file:Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 
 package io.sellmair.evas
 
@@ -26,7 +25,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - cold producer`() = runTest(States()) {
+    fun testColdProducer() = runTest(States()) {
         val collectedStates = mutableListOf<ColdState?>()
 
         val producer = launchState { key: ColdState.Key ->
@@ -50,7 +49,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - cold producer - state reset`() = runTest(States()) {
+    fun testColdProducerStateReset() = runTest(States()) {
         launchState { _: ColdState.Key ->
             var i = 0
             while (isActive) {
@@ -79,7 +78,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - hot producer`() = runTest(States()) {
+    fun testHotProducer() = runTest(States()) {
         launchState(HotState.Key) {
             HotState("Hello").emit()
         }
@@ -90,7 +89,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - hot producer - is shared`() = runTest(States()) {
+    fun testHotProducerIsShared() = runTest(States()) {
         var isLaunched = false
         launchState(HotState.Key) {
             HotState("Hello").emit()
@@ -107,7 +106,7 @@ class StatesTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `test - keepActive`() = runTest(States()) {
+    fun testKeepActive() = runTest(States()) {
         launchState(keepActive = 3.seconds + 1.milliseconds) { _: ColdState.Key ->
             while (currentCoroutineContext().isActive) {
                 ColdState(currentTime).emit()
@@ -140,7 +139,7 @@ class StatesTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `test - keepActive - resubscribe`() = runTest(States()) {
+    fun testKeepActiveResubscribe() = runTest(States()) {
         var launched = false
         launchState(keepActive = 2.seconds + 1.milliseconds) { _: ColdState.Key ->
             assertFalse(launched, "Another producer was already launched!")
@@ -177,7 +176,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - hot state producer job - is completed after corotuine finished`() = runTest(States()) {
+    fun testHotStateProducerJobCompletesAfterCoroutineFinishes() = runTest(States()) {
         val stateProducerJob = launchState(HotState, StandardTestDispatcher(testScheduler)) {
             HotState(42).emit()
         }
@@ -188,7 +187,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - hot state producer is started eagerly`() = runTest(States()) {
+    fun testHotStateProducerIsStartedEagerly() = runTest(States()) {
         launchState(HotState, StandardTestDispatcher(testScheduler)) {
             HotState(42).emit()
         }
@@ -198,7 +197,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - hot state started lazily`() = runTest(States()) {
+    fun testHotStateStartedLazily() = runTest(States()) {
         var isSubscribed = false
 
         val stateProducerJob = launchState(HotState, StandardTestDispatcher(testScheduler), StateProducerStarted.Lazily) {
@@ -219,7 +218,7 @@ class StatesTest {
 
 
     @Test
-    fun `test - update`() = runTest(States()) {
+    fun testUpdate() = runTest(States()) {
         assertEquals(States.Update(null, HotState(1)), HotState.update { HotState(1) })
 
         assertEquals(
@@ -233,7 +232,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - getAndUpdate`() = runTest(States()) {
+    fun testGetAndUpdate() = runTest(States()) {
         assertEquals(null, HotState.getAndUpdate { HotState(1) })
         assertEquals(HotState(1), HotState.getAndUpdate { HotState(it!!.id as Int + 1) })
         assertEquals(HotState(2), HotState.getAndUpdate { null })
@@ -241,7 +240,7 @@ class StatesTest {
     }
 
     @Test
-    fun `test - updateAndGet`() = runTest(States()) {
+    fun testUpdateAndGet() = runTest(States()) {
         assertEquals(HotState(1), HotState.updateAndGet { HotState(1) })
         assertEquals(HotState(2), HotState.updateAndGet { it!!.copy(id = (it.id as Int).inc()) })
     }
