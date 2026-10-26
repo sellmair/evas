@@ -1,17 +1,20 @@
 [versions]
-kotlin = "2.2.21"
-atomicFu = "0.26.1"
-androidGradlePlugin = "8.7.1"
-compose = "1.9.3"
-coroutines = "1.10.2"
-kotlinxBenchmark = "0.4.13"
-kotlinxBinaryCompatibilityValidator = "0.17.0"
-ktor = "3.1.3"
+kotlin = "2.4.21"
+atomicFu = "0.33.0"
+androidGradlePlugin = "9.4.1"
+compose = "1.12.2"
+# Last Compose runtime publishing iosX64/macosX64: Required to keep these 'evas-compose' targets
+composeRuntimeForLibraries = "1.10.3"
+coroutines = "1.11.0"
+kotlinxBenchmark = "0.5.0"
+kotlinxBinaryCompatibilityValidator = "0.18.2"
+ktor = "3.6.0"
 
 [libraries]
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
+composeRuntime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeRuntimeForLibraries" }
 kotlinxBenchmarkRuntime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinxBenchmark" }
 
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -19,4 +22,4 @@ ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktorClientDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 lincheck = "org.jetbrains.kotlinx:lincheck:2.39"
-okio = "com.squareup.okio:okio:3.11.0"
+okio = "com.squareup.okio:okio:3.18.2"

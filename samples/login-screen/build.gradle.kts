@@ -1,21 +1,18 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.konan.target.Family.IOS
 
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.compose")
-    id("com.android.application")
+    id("com.android.kotlin.multiplatform.library")
     id("org.jetbrains.compose")
 }
 
 kotlin {
     /* Supported Targets */
     jvm()
-    androidTarget()
-    iosX64()
+    android {}
     iosArm64()
     iosSimulatorArm64()
 
@@ -25,8 +22,8 @@ kotlin {
         implementation(project(":evas"))
         implementation(project(":evas-compose"))
 
-        implementation("com.russhwolf:multiplatform-settings:1.1.1")
-        implementation("com.russhwolf:multiplatform-settings-no-arg:1.1.1")
+        implementation("com.russhwolf:multiplatform-settings:1.3.0")
+        implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
 
         implementation(compose.ui)
         implementation(compose.foundation)
@@ -46,9 +43,6 @@ kotlin {
     }
 
     sourceSets.androidMain.dependencies {
-        implementation("androidx.activity:activity-compose:1.9.3")
-        implementation("androidx.appcompat:appcompat:1.7.0")
-        implementation("androidx.core:core-ktx:1.15.0")
         implementation(deps.ktorClientCio)
     }
 
@@ -60,31 +54,6 @@ kotlin {
 
     sourceSets.appleMain.dependencies {
         implementation(deps.ktorClientDarwin)
-    }
-}
-
-/* Android Options */
-android {
-    compileSdk = 35
-    namespace = "io.sellmair.loginScreen"
-    defaultConfig {
-        minSdk = 24
-        applicationId = "io.sellmair.loginScreenSample"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-}
-
-/* Setup Android Tests (For this project I would like them to not be connected to 'commonTest') */
-kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    androidTarget {
-        instrumentedTestVariant {
-            sourceSetTree.set(KotlinSourceSetTree.instrumentedTest)
-        }
-
-        unitTestVariant {
-            sourceSetTree.set(KotlinSourceSetTree.unitTest)
-        }
     }
 }
 

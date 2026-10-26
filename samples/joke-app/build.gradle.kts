@@ -1,13 +1,11 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.konan.target.Family.IOS
 
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.compose")
-    id("com.android.application")
+    id("com.android.kotlin.multiplatform.library")
     id("org.jetbrains.compose")
 }
 
@@ -16,8 +14,7 @@ kotlin {
 
     /* Supported Targets */
     jvm()
-    androidTarget()
-    iosX64()
+    android {}
     iosArm64()
     iosSimulatorArm64()
 
@@ -42,9 +39,6 @@ kotlin {
     }
 
     sourceSets.androidMain.dependencies {
-        implementation("androidx.activity:activity-compose:1.9.3")
-        implementation("androidx.appcompat:appcompat:1.7.0")
-        implementation("androidx.core:core-ktx:1.15.0")
         implementation(deps.ktorClientCio)
     }
 
@@ -56,31 +50,6 @@ kotlin {
 
     sourceSets.appleMain.dependencies {
         implementation(deps.ktorClientDarwin)
-    }
-}
-
-/* Android Options */
-android {
-    compileSdk = 35
-    namespace = "io.sellmair.jokes"
-    defaultConfig {
-        minSdk = 24
-        applicationId = "io.sellmair.jokes"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-}
-
-/* Setup Android Tests (For this project I would like them to not be connected to 'commonTest') */
-kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    androidTarget {
-        instrumentedTestVariant {
-            sourceSetTree.set(KotlinSourceSetTree.instrumentedTest)
-        }
-
-        unitTestVariant {
-            sourceSetTree.set(KotlinSourceSetTree.unitTest)
-        }
     }
 }
 

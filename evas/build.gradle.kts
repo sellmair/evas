@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
+    id("com.android.kotlin.multiplatform.library")
     org.jetbrains.kotlinx.atomicfu
     org.jetbrains.kotlinx.`binary-compatibility-validator`
     org.jetbrains.kotlinx.benchmark
@@ -21,7 +21,9 @@ kotlin {
     }
 
     jvm()
-    androidTarget()
+    android {
+        withHostTest {}
+    }
 
     linuxX64()
     linuxArm64()
@@ -91,7 +93,7 @@ run {
         associateWith(kotlin.macosArm64().compilations.getByName("main"))
         /* Let's use 'associateWith' once kotlinx.benchmark also starts using this mechanism */
         defaultSourceSet.dependencies {
-            implementation(project)
+            implementation(project(":evas"))
         }
     }
 
