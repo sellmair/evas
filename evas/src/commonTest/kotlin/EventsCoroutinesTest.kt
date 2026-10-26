@@ -9,7 +9,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 class EventsCoroutinesTest {
 
     data class TestState(val id: Any) : State {
@@ -19,7 +18,7 @@ class EventsCoroutinesTest {
     }
 
     @Test
-    fun `test - listener is registered inline`() = runTest(Events()) {
+    fun testListenerIsRegisteredInline() = runTest(Events()) {
         val events = currentCoroutineContext().eventsOrThrow as EventsImpl
 
         events.typedChannels.snapshot().let { channels ->
@@ -43,7 +42,7 @@ class EventsCoroutinesTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `test - listener in scope producer is registered inline`() = runTest(Events() + States()) {
+    fun testListenerInScopeProducerIsRegisteredInline() = runTest(Events() + States()) {
         val events = currentCoroutineContext().eventsOrThrow as EventsImpl
         launchState(TestState, UnconfinedTestDispatcher(testScheduler)) {
             collectEventsAsync<Event> { }

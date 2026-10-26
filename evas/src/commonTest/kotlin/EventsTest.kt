@@ -8,14 +8,13 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 
-@Suppress("NAME_CONTAINS_ILLEGAL_CHARS")
 class EventsTest {
 
     data class TestEventA(val id: Any) : Event
     data class TestEventB(val id: Any) : Event
 
     @Test
-    fun `test - simple event emission - single collector`() = runTest(Events()) {
+    fun testSimpleEventEmissionSingleCollector() = runTest(Events()) {
         val receivedEvents = mutableListOf<TestEventA>()
         collectEventsAsync<TestEventA>(Dispatchers.Unconfined) { receivedEvents += it }
 
@@ -29,7 +28,7 @@ class EventsTest {
     }
 
     @Test
-    fun `test - multiple events - multiple collectors`() = runTest(Events()) {
+    fun testMultipleEventsMultipleCollectors() = runTest(Events()) {
         /* Collector A */
         val receivedEventsA = mutableListOf<TestEventA>()
         collectEventsAsync<TestEventA>(Dispatchers.Unconfined) { receivedEventsA += it }
@@ -57,7 +56,7 @@ class EventsTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `test - slow subscriber does not block other emissions`() = runTest(Events()) {
+    fun testSlowSubscriberDoesNotBlockOtherEmissions() = runTest(Events()) {
         val receivedEventsA = mutableListOf<TestEventA>()
         val receivedEventsB = mutableListOf<TestEventB>()
 
@@ -91,7 +90,7 @@ class EventsTest {
 
     @Test
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun `test - slow and fast subscriber loops`() = runTest(Events()) {
+    fun testSlowAndFastSubscriberLoops() = runTest(Events()) {
         val receivedEventsA = mutableListOf<TestEventA>()
         val receivedEventsB = mutableListOf<TestEventB>()
 
@@ -132,7 +131,7 @@ class EventsTest {
 
     @Test
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun `test - event emission waits for all subscribers to finish`() = runTest(Events()) {
+    fun testEventEmissionWaitsForAllSubscribersToFinish() = runTest(Events()) {
         val receivedSubscriber1 = mutableListOf<TestEventA>()
         val receivedSubscriber2 = mutableListOf<TestEventA>()
 
@@ -159,7 +158,7 @@ class EventsTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `test - event listeners are executed in parallel`() = runTest(Events()) {
+    fun testEventListenersAreExecutedInParallel() = runTest(Events()) {
         data class Checkpoint(val name: String)
 
         val collectorAWaiting = Checkpoint("CollectorAWaiting")
@@ -193,7 +192,7 @@ class EventsTest {
     }
 
     @Test
-    fun `test - exception`() = runTest(Events()) {
+    fun testException() = runTest(Events()) {
         val exceptions = mutableListOf<Throwable>()
         val exception = IllegalStateException("Test Exception")
         val handler = CoroutineExceptionHandler { _, throwable ->
@@ -216,7 +215,7 @@ class EventsTest {
     }
 
     @Test
-    fun `test - listener gets cleaned in Events`() = runTest(Events()) {
+    fun testListenerGetsCleanedInEvents() = runTest(Events()) {
         val events = currentCoroutineContext().eventsOrThrow as EventsImpl
         val collector = collectEventsAsync<TestEventA> {}
         assertEquals(setOf(TestEventA::class), events.typedChannels.snapshot().keys)
@@ -226,7 +225,7 @@ class EventsTest {
     }
 
     @Test
-    fun `test - listener gets cleaned in Events - multiple collectors`() = runTest(Events()) {
+    fun testListenerGetsCleanedInEventsWithMultipleCollectors() = runTest(Events()) {
         val events = currentCoroutineContext().eventsOrThrow as EventsImpl
         val collector1 = collectEventsAsync<TestEventA> {}
         val collector2 = collectEventsAsync<TestEventA> {}

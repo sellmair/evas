@@ -38,6 +38,10 @@ kotlin {
         implementation(compose.uiTest)
     }
 
+    sourceSets.jvmTest.dependencies {
+        implementation(kotlin("test-junit"))
+    }
+
     sourceSets.androidMain.dependencies {
         implementation(deps.ktorClientCio)
     }
