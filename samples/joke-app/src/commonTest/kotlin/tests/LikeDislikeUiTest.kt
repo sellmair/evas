@@ -1,6 +1,7 @@
 package tests
 
 import androidx.compose.ui.test.*
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.sellmair.evas.Events
 import io.sellmair.evas.States
 import io.sellmair.evas.collectEvents
